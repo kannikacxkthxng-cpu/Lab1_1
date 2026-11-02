@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ByteBooks | ร้านหนังสือคอมพิวเตอร์และเทคโนโลยี</title>
+  <!-- Google Fonts: Prompt & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Prompt', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#2563eb',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased text-slate-800">
+
+  <!-- Top Announcement Bar (Subtle) -->
+  <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 text-center tracking-wide">
+    ✨ ต้อนรับเปิดเทอม/อัปสกิลใหม่: สั่งซื้อหนังสือครบ 600 บาท จัดส่งฟรีทั่วประเทศ
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold shadow-sm transition-transform group-hover:scale-105">
+          <i data-lucide="terminal" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight text-slate-900">Byte<span class="text-blue-600">Books</span></span>
+          <span class="hidden sm:inline-block text-[11px] text-slate-400 font-normal ml-1.5 border-l border-slate-200 pl-2">หนังสือคอมพิวเตอร์</span>
+        </div>
+      </a>
+
+      <!-- Quick Search Bar (Desktop) -->
+      <div class="hidden md:flex flex-1 max-w-md mx-4 relative">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input 
+          id="desktopSearchInput"
+          type="text" 
+          placeholder="ค้นหาชื่อหนังสือ, ภาษาโค้ด, หรือผู้แต่ง..."
+          class="w-full bg-slate-100 hover:bg-slate-200/70 focus:bg-white text-sm text-slate-800 placeholder-slate-400 rounded-full pl-10 pr-4 py-2 border border-transparent focus:border-blue-500 focus:outline-none transition duration-150"
+          oninput="handleSearch(this.value)"
+        />
+        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleWishlistModal()" class="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-full transition relative" title="รายการที่ถูกใจ">
+          <i data-lucide="heart" class="w-5 h-5"></i>
+          <span id="wishlistCount" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-semibold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+
+        <button onclick="toggleCartDrawer()" class="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-full transition relative flex items-center gap-1.5" title="ตะกร้าสินค้า">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+          <span id="cartCountBadge" class="hidden absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-semibold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+
+        <a href="#about-section" class="hidden sm:inline-flex text-xs font-medium text-slate-600 hover:text-blue-600 py-1.5 px-3 rounded-lg border border-slate-200 hover:border-slate-300 transition">
+          คู่มือการเลือกเล่ม
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile Search Bar -->
+    <div class="p-3 bg-white border-t border-slate-100 md:hidden">
+      <div class="relative">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input 
+          id="mobileSearchInput"
+          type="text" 
+          placeholder="ค้นหาชื่อหนังสือ เช่น Python, AI..."
+          class="w-full bg-slate-100 text-sm text-slate-800 placeholder-slate-400 rounded-full pl-10 pr-4 py-2 border border-transparent focus:border-blue-500 focus:outline-none"
+          oninput="handleSearch(this.value)"
+        />
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-b from-white to-slate-50 border-b border-slate-200 py-12 sm:py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 mb-4">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        คัดสรรเฉพาะเนื้อหาที่ทันสมัยและเข้าใจง่าย
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
+        เริ่มต้นสายคอมฯ หรืออัปสกิลเทคโนโลยี<br class="hidden sm:inline" />
+        <span class="text-blue-600">ด้วยหนังสือที่ใช่และอ่านรู้เรื่อง</span>
+      </h1>
+      <p class="mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+        รวมคู่มือเขียนโปรแกรม ปัญญาประดิษฐ์ (AI) ความปลอดภัยไซเบอร์ ไปจนถึงพื้นฐานคอมพิวเตอร์ 
+        เน้นสรุปสาระสำคัญ พร้อมตัวอย่างโค้ดจริงที่นำไปใช้ได้ทันที
+      </p>
+
+      <!-- Quick Feature Badges -->
+      <div class="mt-8 flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-xs text-slate-500">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+          <span>มีโค้ดตัวอย่างดาวน์โหลดฟรี</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+          <span>อ่านตัวอย่างสารบัญได้ก่อนซื้อ</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+          <span>จัดส่งรวดเร็ว มีทั้งเล่มพิมพ์และ E-Book</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Area -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+    
+    <!-- Category Filter Tabs & Sort -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <!-- Category Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-none" id="categoryButtons">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <!-- Sorting dropdown -->
+      <div class="flex items-center gap-2 self-end sm:self-auto text-xs text-slate-500">
+        <label for="sortSelect">เรียงตาม:</label>
+        <select id="sortSelect" onchange="handleSort(this.value)" class="bg-white border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500">
+          <option value="popular">ยอดนิยม</option>
+          <option value="newest">มาใหม่ล่าสุด</option>
+          <option value="price-asc">ราคา: ต่ำ - สูง</option>
+          <option value="price-desc">ราคา: สูง - ต่ำ</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Active Filters & Result Count -->
+    <div class="flex items-center justify-between py-4 text-xs text-slate-500">
+      <div id="resultCountText">กำลังแสดง 0 รายการ</div>
+      <button id="resetFilterBtn" onclick="resetFilters()" class="hidden text-blue-600 hover:underline">
+        ล้างตัวกรองทั้งหมด
+      </button>
+    </div>
+
+    <!-- Book Grid -->
+    <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <!-- Book cards populated via JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16">
+      <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="book-open" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-base font-semibold text-slate-800">ไม่พบหนังสือที่ตรงกับคำค้นหา</h3>
+      <p class="text-xs text-slate-500 mt-1">ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่อื่นดูนะครับ</p>
+      <button onclick="resetFilters()" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition">
+        แสดงหนังสือทั้งหมด
+      </button>
+    </div>
+
+    <!-- Recommendation Guide Section -->
+    <section id="about-section" class="mt-16 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8">
+      <div class="max-w-2xl">
+        <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Guide for Beginners</span>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">มือใหม่หัดเริ่มเรียนคอมพิวเตอร์ ควรเริ่มเล่มไหนก่อน?</h2>
+        <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+          หากคุณยังไม่แน่ใจว่าจะเริ่มต้นเรียนด้านไหน เราแบ่งเส้นทางการศึกษาออกเป็น 3 สายหลักที่แนะนำ:
+        </p>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-200 transition">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm mb-3">1</div>
+          <h3 class="text-sm font-semibold text-slate-900">สายเขียนโปรแกรม (Programming)</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">แนะนำเริ่มที่ภาษา <strong>Python</strong> หรือ <strong>JavaScript</strong> เพื่อเข้าใจตรรกะและลอจิก ก่อนต่อยอดสู่ Web/App Dev</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-purple-200 transition">
+          <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm mb-3">2</div>
+          <h3 class="text-sm font-semibold text-slate-900">สายข้อมูล & AI (Data & AI)</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">เริ่มต้นด้วย <strong>SQL & Python สำหรับจัดการข้อมูล</strong> ต่อด้วย Machine Learning และ Generative AI</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-emerald-200 transition">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm mb-3">3</div>
+          <h3 class="text-sm font-semibold text-slate-900">สายระบบ & เน็ตเวิร์ก (DevOps & Security)</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">ปูพื้นฐานจาก <strong>Computer Architecture & Network</strong> แล้วต่อด้วย Docker, Linux และ Cloud</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-16 text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+          <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+        </div>
+        <span class="font-semibold text-slate-700">ByteBooks</span>
+        <span>— แหล่งรวมหนังสือคอมพิวเตอร์และคู่มือโปรแกรมเมอร์</span>
+      </div>
+      <div>
+        ออกแบบด้วยแนวคิด Minimal & Clean UX/UI • เรียบง่าย สบายตา ค้นหาง่าย
+      </div>
+    </div>
+  </footer>
+
+  <!-- Book Detail Modal -->
+  <div id="bookModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+        <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider" id="modalCategory">หมวดหมู่</span>
+        <button onclick="closeBookModal()" class="text-slate-400 hover:text-slate-700 p-1 rounded-full hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-6 overflow-y-auto space-y-4 text-slate-700 text-sm">
+        <div class="flex gap-4">
+          <div id="modalCover" class="w-24 h-32 rounded-lg flex items-center justify-center text-white font-bold p-2 text-center text-xs shrink-0 shadow-sm">
+            <!-- Render cover here -->
+          </div>
+          <div>
+            <h3 id="modalTitle" class="text-lg font-bold text-slate-900 leading-snug">ชื่อหนังสือ</h3>
+            <p id="modalAuthor" class="text-xs text-slate-500 mt-1">ผู้แต่ง</p>
+            <div class="flex items-center gap-2 mt-2">
+              <span id="modalPrice" class="text-base font-bold text-blue-600">฿350</span>
+              <span id="modalFormat" class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">เล่มพิมพ์ + PDF</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-semibold text-slate-900 uppercase tracking-wide mb-1">เนื้อหาโดยย่อ</h4>
+          <p id="modalDesc" class="text-xs text-slate-600 leading-relaxed"></p>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-semibold text-slate-900 uppercase tracking-wide mb-1.5">หัวข้อเด่นในเล่ม (สารบัญย่อ)</h4>
+          <ul id="modalTOC" class="text-xs text-slate-600 space-y-1 list-disc list-inside bg-slate-50 p-3 rounded-lg border border-slate-100">
+          </ul>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-center text-[11px] text-slate-500 pt-2 border-t border-slate-100">
+          <div class="bg-slate-50 py-2 rounded-lg">
+            <span class="block font-semibold text-slate-700" id="modalPages">320 หน้า</span>
+            จำนวนหน้า
+          </div>
+          <div class="bg-slate-50 py-2 rounded-lg">
+            <span class="block font-semibold text-slate-700" id="modalLevel">ผู้เริ่มต้น - ปานกลาง</span>
+            ระดับความเหมาะสม
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+        <button id="modalWishlistBtn" onclick="toggleWishlistFromModal()" class="px-3 py-2 text-slate-600 hover:text-rose-500 hover:bg-slate-200/60 rounded-lg text-xs font-medium flex items-center gap-1.5 transition">
+          <i data-lucide="heart" class="w-4 h-4"></i>
+          <span>บันทึกถูกใจ</span>
+        </button>
+        <button id="modalAddToCartBtn" onclick="addToCartFromModal()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5 shadow-sm">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          <span>เพิ่มลงตะกร้า</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm">
+    <div class="absolute right-0 top-0 bottom-0 max-w-sm w-full bg-white shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+      <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-blue-600"></i>
+          <h3 class="font-bold text-slate-900 text-sm">ตะกร้าสินค้า</h3>
+          <span id="cartCountHeader" class="text-xs text-slate-400">(0 รายการ)</span>
+        </div>
+        <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Cart Items -->
+      <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Cart Footer -->
+      <div class="p-4 border-t border-slate-200 bg-slate-50">
+        <div class="flex justify-between text-xs text-slate-500 mb-1">
+          <span>ค่าจัดส่ง</span>
+          <span class="text-emerald-600 font-medium">ฟรี</span>
+        </div>
+        <div class="flex justify-between text-sm font-bold text-slate-900 mb-4">
+          <span>ยอดรวมทั้งหมด</span>
+          <span id="cartTotalPrice" class="text-blue-600 text-base">฿0</span>
+        </div>
+        <button onclick="checkout()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg text-xs font-semibold tracking-wide shadow-sm transition">
+          ดำเนินการชำระเงิน
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-slate-900 text-white text-xs px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2 transition-all">
+    <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMessage">เพิ่มลงตะกร้าเรียบร้อยแล้ว</span>
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    // Sample Books Database
+    const books = [
+      {
+        id: 'b1',
+        title: 'เริ่มต้นเขียนโค้ดด้วย Python ฉบับเข้าใจง่ายที่สุด',
+        author: 'ดร. กิตติศักดิ์ พัฒนกิจ',
+        category: 'programming',
+        categoryName: 'การเขียนโปรแกรม',
+        price: 320,
+        rating: 4.9,
+        reviewsCount: 142,
+        isBestseller: true,
+        pages: 288,
+        level: 'สำหรับผู้เริ่มต้น (Zero to Hero)',
+        coverColor: 'from-blue-600 to-indigo-800',
+        badge: 'ยอดนิยม #1',
+        desc: 'คู่มือเขียนโปรแกรม Python สำหรับผู้ที่ไม่เคยมีพื้นฐานมาก่อน สอนตั้งแต่หลักการคิดเชิงตรรกะ ตัวแปร เงื่อนไข ฟังก์ชัน ไปจนถึงสร้างโปรแกรมจำลองขนาดเล็ก พร้อมแบบฝึกหัดท้ายบท',
+        toc: ['พื้นฐานตรรกะและติดตั้ง Python', 'ตัวแปร ชนิดข้อมูล และโอเปอเรเตอร์', 'โครงสร้างควบคุม if-else และการวนลูป', 'ฟังก์ชัน และการจัดการโมดูล', 'การจัดการไฟล์ และ Mini-Project']
+      },
+      {
+        id: 'b2',
+        title: 'Full-Stack Web Development ด้วย React & Node.js',
+        author: 'ธีรเดช วงศ์สว่าง',
+        category: 'programming',
+        categoryName: 'การเขียนโปรแกรม',
+        price: 450,
+        rating: 4.8,
+        reviewsCount: 89,
+        isBestseller: false,
+        pages: 420,
+        level: 'ระดับปานกลาง',
+        coverColor: 'from-cyan-600 to-blue-800',
+        badge: 'อัปเดตใหม่ 2026',
+        desc: 'เจาะลึกการพัฒนาเว็บแอปพลิเคชันยุคใหม่ด้วย React, Tailwind CSS, Express และ MongoDB ครบวงจรตั้งแต่เขียน Frontend สร้าง REST API จนถึงการ Deploy ขึ้น Cloud',
+        toc: ['ทบทวน JavaScript ES6+ สมัยใหม่', 'สร้าง UI ด้วย React และ Tailwind CSS', 'ระบบ State Management และ Hooks', 'พัฒนา Backend API ด้วย Express & Node', 'เชื่อมต่อฐานข้อมูล MongoDB และ Deploy']
+      },
+      {
+        id: 'b3',
+        title: 'AI & Machine Learning พื้นฐานสู่การประยุกต์ใช้งานจริง',
+        author: 'ผศ.ดร. ภาณุพงศ์ ศิริพงษ์',
+        category: 'ai-data',
+        categoryName: 'AI & Data Science',
+        price: 480,
+        rating: 4.9,
+        reviewsCount: 110,
+        isBestseller: true,
+        pages: 380,
+        level: 'ผู้เริ่มต้น - ปานกลาง',
+        coverColor: 'from-purple-600 to-indigo-900',
+        badge: 'แนะนำ',
+        desc: 'อธิบายหลักการทำงานของ AI, Machine Learning และ Deep Learning อย่างเป็นขั้นตอน ไม่ต้องมีพื้นฐานคณิตศาสตร์ขั้นสูงก็เข้าใจได้ พร้อมตัวอย่างโค้ดทำนายผลและจำแนกข้อมูล',
+        toc: ['AI, ML, Deep Learning ต่างกันอย่างไร?', 'การเตรียมและทำความสะอาดข้อมูล (Data Cleaning)', 'โมเดล Supervised & Unsupervised Learning', 'ทำความรู้จัก Neural Network และ LLM', 'Workshop สร้างโมเดลทำนายราคาบ้าน']
+      },
+      {
+        id: 'b4',
+        title: 'SQL & Database Design ฉบับทำงานจริง',
+        author: 'สิรภพ เกษมสุข',
+        category: 'ai-data',
+        categoryName: 'AI & Data Science',
+        price: 290,
+        rating: 4.7,
+        reviewsCount: 65,
+        isBestseller: false,
+        pages: 250,
+        level: 'สำหรับผู้เริ่มต้น',
+        coverColor: 'from-emerald-600 to-teal-800',
+        badge: null,
+        desc: 'เรียนรู้การออกแบบตารางฐานข้อมูลเชิงสัมพันธ์ (Relational DB) การเขียนคำสั่ง SELECT, JOIN, GROUP BY ไปจนถึงการ Optimize Query ให้รวดเร็วในระดับ Production',
+        toc: ['หลักการของฐานข้อมูลเชิงสัมพันธ์', 'คำสั่งพื้นฐาน SELECT, WHERE, ORDER BY', 'เทคนิคการ JOIN หลายตารางอย่างมีประสิทธิภาพ', 'Normalisation & ออกแบบ Schema', 'การทำ Indexing เพื่อเพิ่มความเร็ว']
+      },
+      {
+        id: 'b5',
+        title: 'Cybersecurity 101: พื้นฐานความมั่นคงปลอดภัยไซเบอร์',
+        author: 'วรวิทย์ พิทักษ์ธรรม (CISSP)',
+        category: 'security',
+        categoryName: 'ความปลอดภัยไซเบอร์',
+        price: 390,
+        rating: 4.8,
+        reviewsCount: 78,
+        isBestseller: false,
+        pages: 310,
+        level: 'ผู้เริ่มต้น - ระดับปานกลาง',
+        coverColor: 'from-rose-600 to-red-900',
+        badge: 'ขายดี',
+        desc: 'เจาะลึกภัยคุกคามทางไซเบอร์ในยุคปัจจุบัน เทคนิคการแฮกที่พบบ่อย (Phishing, Malware, SQL Injection) พร้อมวิธีตั้งค่าป้องกันระบบและเซิร์ฟเวอร์ตามมาตรฐานสากล',
+        toc: ['แนวคิด CIA Triad และความเสี่ยงทางไซเบอร์', 'วิเคราะห์ช่องโหว่ยอดนิยม (OWASP Top 10)', 'การเข้ารหัสข้อมูล (Cryptography & SSL/TLS)', 'ระบบ Firewall, IDS/IPS และการเฝ้าระวัง', 'จริยธรรมและกฎหมาย PDPA']
+      },
+      {
+        id: 'b6',
+        title: 'Docker & Kubernetes สำหรับ Developer และ DevOps',
+        author: 'พงศ์พิสิฐ เมธาคุณ',
+        category: 'devops',
+        categoryName: 'Cloud & DevOps',
+        price: 490,
+        rating: 4.9,
+        reviewsCount: 95,
+        isBestseller: true,
+        pages: 360,
+        level: 'ระดับปานกลาง - ระดับสูง',
+        coverColor: 'from-sky-600 to-blue-900',
+        badge: 'แนะนำอย่างยิ่ง',
+        desc: 'เปลี่ยนวิธีจัดการแอปพลิเคชันของคุณด้วย Containerization เรียนรู้ตั้งแต่เขียน Dockerfile, Docker Compose จนถึงจัดการ Cluster ขนาดใหญ่ด้วย Kubernetes อย่างมั่นใจ',
+        toc: ['ทำไมต้อง Container? เปรียบเทียบกับ VM', 'คำสั่งพื้นฐานและการเขียน Dockerfile', 'จัดการ Multi-container ด้วย Docker Compose', 'สถาปัตยกรรม Kubernetes (Pods, Services, Ingress)', 'การทำ CI/CD Pipeline ขั้นพื้นฐาน']
+      },
+      {
+        id: 'b7',
+        title: 'คอมพิวเตอร์ทำงานอย่างไร: Hardware & Architecture',
+        author: 'ดร. วิเชียร เลิศปัญญา',
+        category: 'basics',
+        categoryName: 'พื้นฐานคอมพิวเตอร์',
+        price: 280,
+        rating: 4.6,
+        reviewsCount: 52,
+        isBestseller: false,
+        pages: 240,
+        level: 'สำหรับผู้เริ่มต้น',
+        coverColor: 'from-amber-600 to-orange-800',
+        badge: null,
+        desc: 'เจาะลึกการทำงานภายในเคสคอมพิวเตอร์ ตั้งแต่ CPU, RAM, เมนบอร์ด, ระบบ Bus สัญญาณนาฬิกา ไปจนถึงระบบปฏิบัติการ (OS) จัดสรรทรัพยากรอย่างไร เหมาะกับนักเรียน-นักศึกษา',
+        toc: ['ระบบเลขฐานสองและลอจิกเกต', 'สถาปัตยกรรม CPU และหน่วยความจำ', 'การทำงานของระบบ Input / Output', 'Operating System: Process & Memory Management', 'แนวโน้มเทคโนโลยีฮาร์ดแวร์ยุคใหม่']
+      },
+      {
+        id: 'b8',
+        title: 'Network Fundamentals: เข้าใจระบบเครือข่ายอย่างแท้จริง',
+        author: 'นภนต์ ชัยชนะ (CCNA)',
+        category: 'basics',
+        categoryName: 'พื้นฐานคอมพิวเตอร์',
+        price: 360,
+        rating: 4.7,
+        reviewsCount: 44,
+        isBestseller: false,
+        pages: 290,
+        level: 'สำหรับผู้เริ่มต้น',
+        coverColor: 'from-emerald-700 to-teal-900',
+        badge: null,
+        desc: 'ไม่ต้องจำแบบนกแก้วนกขุนทอง อธิบายระบบเครือข่ายด้วยภาพและสถานการณ์จริง OSI 7 Layer, TCP/IP, IP Address & Subnetting, DNS, DHCP และการแก้ปัญหาเน็ตเวิร์กเบื้องต้น',
+        toc: ['ทำความเข้าใจแบบจำลอง OSI 7 Layers', 'IP Address และเทคนิค Subnetting ฉบับง่าย', 'โปรโตคอล TCP vs UDP', 'ระบบ DNS, DHCP และ NAT ทำงานอย่างไร', 'คำสั่ง CLI ตรวจสอบเน็ตเวิร์ก (ping, traceroute)']
+      }
+    ];
+
+    // Category options
+    const categories = [
+      { id: 'all', label: 'ทั้งหมด' },
+      { id: 'programming', label: 'การเขียนโค้ด' },
+      { id: 'ai-data', label: 'AI & Data' },
+      { id: 'security', label: 'ความปลอดภัย' },
+      { id: 'devops', label: 'Cloud & DevOps' },
+      { id: 'basics', label: 'พื้นฐานคอมฯ' }
+    ];
+
+    // State
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let currentSort = 'popular';
+    let cart = [];
+    let wishlist = [];
+    let activeModalBook = null;
+
+    // Initialize UI
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategoryButtons();
+      renderBooks();
+      lucide.createIcons();
+    });
+
+    // Render Category Filter Buttons
+    function renderCategoryButtons() {
+      const container = document.getElementById('categoryButtons');
+      container.innerHTML = categories.map(cat => `
+        <button 
+          onclick="selectCategory('${cat.id}')"
+          class="px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+            currentCategory === cat.id 
+              ? 'bg-slate-900 text-white shadow-sm' 
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }"
+        >
+          ${cat.label}
+        </button>
+      `).join('');
+    }
+
+    function selectCategory(id) {
+      currentCategory = id;
+      renderCategoryButtons();
+      renderBooks();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim().toLowerCase();
+      
+      // Sync desktop & mobile inputs
+      const dInput = document.getElementById('desktopSearchInput');
+      const mInput = document.getElementById('mobileSearchInput');
+      if (dInput.value !== val) dInput.value = val;
+      if (mInput.value !== val) mInput.value = val;
+
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) {
+        if (searchQuery.length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+
+      renderBooks();
+    }
+
+    function clearSearch() {
+      handleSearch('');
+    }
+
+    function handleSort(val) {
+      currentSort = val;
+      renderBooks();
+    }
+
+    function resetFilters() {
+      currentCategory = 'all';
+      searchQuery = '';
+      currentSort = 'popular';
+      document.getElementById('desktopSearchInput').value = '';
+      document.getElementById('mobileSearchInput').value = '';
+      document.getElementById('sortSelect').value = 'popular';
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.classList.add('hidden');
+      renderCategoryButtons();
+      renderBooks();
+    }
+
+    // Filter & Sort
+    function getFilteredBooks() {
+      return books.filter(book => {
+        const matchesCategory = currentCategory === 'all' || book.category === currentCategory;
+        const matchesSearch = searchQuery === '' || 
+          book.title.toLowerCase().includes(searchQuery) ||
+          book.author.toLowerCase().includes(searchQuery) ||
+          book.desc.toLowerCase().includes(searchQuery) ||
+          book.categoryName.toLowerCase().includes(searchQuery);
+        return matchesCategory && matchesSearch;
+      }).sort((a, b) => {
+        if (currentSort === 'popular') return (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0) || b.rating - a.rating;
+        if (currentSort === 'price-asc') return a.price - b.price;
+        if (currentSort === 'price-desc') return b.price - a.price;
+        if (currentSort === 'newest') return b.pages - a.pages;
+        return 0;
+      });
+    }
+
+    // Render Books Grid
+    function renderBooks() {
+      const filtered = getFilteredBooks();
+      const grid = document.getElementById('bookGrid');
+      const emptyState = document.getElementById('emptyState');
+      const countText = document.getElementById('resultCountText');
+      const resetBtn = document.getElementById('resetFilterBtn');
+
+      countText.innerText = `แสดง ${filtered.length} เล่มจากทั้งหมด ${books.length} เล่ม`;
+
+      if (currentCategory !== 'all' || searchQuery !== '') {
+        resetBtn.classList.remove('hidden');
+      } else {
+        resetBtn.classList.add('hidden');
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(book => {
+        const isFav = wishlist.includes(book.id);
+        return `
+          <div class="bg-white rounded-xl border border-slate-200/90 overflow-hidden hover:shadow-md hover:border-slate-300 transition duration-200 flex flex-col group">
+            
+            <!-- Book Cover Area -->
+            <div 
+              onclick="openBookModal('${book.id}')"
+              class="relative cursor-pointer bg-gradient-to-br ${book.coverColor} p-4 h-48 flex flex-col justify-between text-white select-none overflow-hidden"
+            >
+              <!-- Subtle decorative pattern -->
+              <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+
+              <div class="flex items-start justify-between relative z-10">
+                <span class="text-[10px] font-semibold tracking-wide bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded text-white/90">
+                  ${book.categoryName}
+                </span>
+                ${book.badge ? `
+                  <span class="text-[10px] font-medium bg-amber-400 text-slate-900 px-2 py-0.5 rounded shadow-sm font-semibold">
+                    ${book.badge}
+                  </span>
+                ` : ''}
+              </div>
+
+              <div class="relative z-10 my-auto text-center px-1">
+                <i data-lucide="book" class="w-6 h-6 mx-auto mb-1.5 opacity-70 group-hover:scale-110 transition-transform"></i>
+                <div class="font-bold text-xs sm:text-sm line-clamp-2 leading-snug drop-shadow-sm">
+                  ${book.title}
+                </div>
+              </div>
+
+              <div class="text-[10px] text-white/70 text-right relative z-10">
+                ${book.author}
+              </div>
+            </div>
+
+            <!-- Book Card Content -->
+            <div class="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1 text-amber-500 text-xs mb-1">
+                  <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                  <span class="font-semibold text-slate-700">${book.rating}</span>
+                  <span class="text-slate-400 text-[11px]">(${book.reviewsCount})</span>
+                </div>
+
+                <h3 
+                  onclick="openBookModal('${book.id}')" 
+                  class="text-xs sm:text-sm font-semibold text-slate-900 hover:text-blue-600 cursor-pointer line-clamp-2 leading-tight"
+                  title="${book.title}"
+                >
+                  ${book.title}
+                </h3>
+
+                <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">
+                  ${book.desc}
+                </p>
+              </div>
+
+              <!-- Price & Quick Action -->
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                <div>
+                  <span class="text-xs text-slate-400 block -mb-1">ราคา</span>
+                  <span class="text-base font-bold text-slate-900">฿${book.price}</span>
+                </div>
+
+                <div class="flex items-center gap-1">
+                  <button 
+                    onclick="toggleWishlist('${book.id}')" 
+                    class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-slate-50 transition"
+                    title="${isFav ? 'นำออกจากที่ถูกใจ' : 'บันทึกเล่มนี้'}"
+                  >
+                    <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-500 text-rose-500' : ''}"></i>
+                  </button>
+                  <button 
+                    onclick="addToCart('${book.id}')"
+                    class="bg-slate-900 hover:bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-medium transition flex items-center gap-1 shadow-sm"
+                  >
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">ใส่ตะกร้า</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // Modal Handling
+    function openBookModal(bookId) {
+      const book = books.find(b => b.id === bookId);
+      if (!book) return;
+
+      activeModalBook = book;
+      document.getElementById('modalCategory').innerText = book.categoryName;
+      document.getElementById('modalTitle').innerText = book.title;
+      document.getElementById('modalAuthor').innerText = `ผู้แต่ง: ${book.author}`;
+      document.getElementById('modalPrice').innerText = `฿${book.price}`;
+      document.getElementById('modalDesc').innerText = book.desc;
+      document.getElementById('modalPages').innerText = `${book.pages} หน้า`;
+      document.getElementById('modalLevel').innerText = book.level;
+
+      // Cover render
+      const cover = document.getElementById('modalCover');
+      cover.className = `w-24 h-32 rounded-lg flex items-center justify-center text-white font-bold p-2 text-center text-xs shrink-0 shadow-sm bg-gradient-to-br ${book.coverColor}`;
+      cover.innerText = book.title;
+
+      // TOC
+      const tocList = document.getElementById('modalTOC');
+      tocList.innerHTML = book.toc.map(item => `<li>${item}</li>`).join('');
+
+      // Wishlist button state
+      updateModalWishlistBtn();
+
+      document.getElementById('bookModal').classList.remove('hidden');
+    }
+
+    function closeBookModal() {
+      document.getElementById('bookModal').classList.add('hidden');
+      activeModalBook = null;
+    }
+
+    function updateModalWishlistBtn() {
+      if (!activeModalBook) return;
+      const isFav = wishlist.includes(activeModalBook.id);
+      const btn = document.getElementById('modalWishlistBtn');
+      btn.innerHTML = `
+        <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-500 text-rose-500' : ''}"></i>
+        <span>${isFav ? 'บันทึกแล้ว' : 'บันทึกถูกใจ'}</span>
+      `;
+      lucide.createIcons();
+    }
+
+    function toggleWishlistFromModal() {
+      if (activeModalBook) {
+        toggleWishlist(activeModalBook.id);
+        updateModalWishlistBtn();
+      }
+    }
+
+    function addToCartFromModal() {
+      if (activeModalBook) {
+        addToCart(activeModalBook.id);
+        closeBookModal();
+      }
+    }
+
+    // Cart Management
+    function addToCart(bookId) {
+      const book = books.find(b => b.id === bookId);
+      if (!book) return;
+
+      const existing = cart.find(item => item.id === bookId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...book, qty: 1 });
+      }
+
+      updateCartBadge();
+      showToast(`เพิ่ม "${book.title.substring(0, 25)}..." ลงตะกร้าแล้ว`);
+    }
+
+    function updateCartBadge() {
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      const badge = document.getElementById('cartCountBadge');
+      const headerCount = document.getElementById('cartCountHeader');
+
+      if (totalQty > 0) {
+        badge.innerText = totalQty;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      headerCount.innerText = `(${totalQty} รายการ)`;
+      renderCartItems();
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById('cartItemsList');
+      const totalPriceEl = document.getElementById('cartTotalPrice');
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-slate-400">
+            <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
+            <p class="text-xs">ยังไม่มีหนังสือในตะกร้า</p>
+          </div>
+        `;
+        totalPriceEl.innerText = '฿0';
+        lucide.createIcons();
+        return;
+      }
+
+      let total = 0;
+      container.innerHTML = cart.map(item => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        return `
+          <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-50 border border-slate-100">
+            <div class="w-10 h-14 rounded bg-gradient-to-br ${item.coverColor} flex items-center justify-center text-[8px] text-white font-bold p-1 text-center shrink-0">
+              ${item.title.substring(0, 10)}..
+            </div>
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-semibold text-slate-800 truncate">${item.title}</h4>
+              <p class="text-[11px] text-blue-600 font-medium">฿${item.price}</p>
+              
+              <div class="flex items-center gap-2 mt-1">
+                <button onclick="changeQty('${item.id}', -1)" class="w-5 h-5 bg-white border border-slate-200 rounded text-slate-600 text-xs flex items-center justify-center hover:bg-slate-100">-</button>
+                <span class="text-xs text-slate-700 font-medium">${item.qty}</span>
+                <button onclick="changeQty('${item.id}', 1)" class="w-5 h-5 bg-white border border-slate-200 rounded text-slate-600 text-xs flex items-center justify-center hover:bg-slate-100">+</button>
+              </div>
+            </div>
+            <button onclick="removeFromCart('${item.id}')" class="text-slate-400 hover:text-rose-500 p-1">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      totalPriceEl.innerText = `฿${total.toLocaleString()}`;
+      lucide.createIcons();
+    }
+
+    function changeQty(bookId, delta) {
+      const item = cart.find(i => i.id === bookId);
+      if (!item) return;
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== bookId);
+      }
+      updateCartBadge();
+    }
+
+    function removeFromCart(bookId) {
+      cart = cart.filter(i => i.id !== bookId);
+      updateCartBadge();
+    }
+
+    function toggleCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert('กรุณาเลือกหนังสือลงตะกร้าก่อนดำเนินการชำระเงิน');
+        return;
+      }
+      alert('ระบบสั่งซื้อจำลอง: ขอบคุณที่สนใจสั่งซื้อหนังสือจาก ByteBooks!');
+      cart = [];
+      updateCartBadge();
+      toggleCartDrawer();
+    }
+
+    // Wishlist
+    function toggleWishlist(bookId) {
+      if (wishlist.includes(bookId)) {
+        wishlist = wishlist.filter(id => id !== bookId);
+        showToast('นำออกจากรายการที่ถูกใจแล้ว');
+      } else {
+        wishlist.push(bookId);
+        showToast('เพิ่มในรายการที่ถูกใจแล้ว');
+      }
+      updateWishlistBadge();
+      renderBooks();
+    }
+
+    function updateWishlistBadge() {
+      const countEl = document.getElementById('wishlistCount');
+      if (wishlist.length > 0) {
+        countEl.innerText = wishlist.length;
+        countEl.classList.remove('hidden');
+      } else {
+        countEl.classList.add('hidden');
+      }
+    }
+
+    function toggleWishlistModal() {
+      if (wishlist.length === 0) {
+        showToast('ยังไม่มีรายการหนังสือที่ถูกใจ');
+        return;
+      }
+      // Filter category to show wishlist
+      const favTitles = books.filter(b => wishlist.includes(b.id)).map(b => b.title).join('\n• ');
+      alert(`หนังสือที่คุณบันทึกไว้ (${wishlist.length} เล่ม):\n• ${favTitles}`);
+    }
+
+    // Toast Notification
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toastMessage');
+      text.innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2500);
+    }
+
+    // Close modal on click outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('bookModal');
+      const cartDrawer = document.getElementById('cartDrawer');
+      if (event.target === modal) {
+        closeBookModal();
+      }
+      if (event.target === cartDrawer) {
+        toggleCartDrawer();
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,944 +1,1208 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ByteBooks | ร้านหนังสือคอมพิวเตอร์และเทคโนโลยี</title>
-  <!-- Google Fonts: Prompt & Inter -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎄 เปรม นมสด | Merry Christmas & Happy Holidays - หอม หวาน มัน อบอุ่นทุกแก้ว</title>
+  <meta name="description" content="ฉลองเทศกาลคริสต์มาสกับ เปรม นมสด นมสดแท้ 100% ร้อนๆ คลายหนาว ขนมปังปิ้งเตาถ่านหอมกรุ่น และบรรยากาศสุดอบอุ่นใต้แสงไฟเทศกาล">
+
+  <!-- Google Fonts: Prompt & Kanit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Prompt', 'Inter', 'sans-serif'],
-          },
           colors: {
-            brand: {
-              50: '#f0f7ff',
-              100: '#e0effe',
-              500: '#2563eb',
-              600: '#1d4ed8',
-              700: '#1e40af',
-              900: '#0f172a',
+            xmas: {
+              red: '#C41E3A',         // Christmas Crimson
+              darkred: '#8B0000',     // Deep Burgundy / Mulled Wine
+              lightred: '#FEE2E2',    // Soft Berry Blush
+              green: '#165B33',       // Christmas Pine Green
+              darkgreen: '#0F3E22',   // Deep Forest Pine
+              lightgreen: '#DCFCE7',  // Soft Mint Pine
+              gold: '#D4AF37',        // Champagne Festive Gold
+              lightgold: '#FEF08A',   // Golden Star
+              snow: '#FFFDF9',        // Warm Snow White
+              cream: '#FDF7EC',       // Cozy Eggnog Cream
+              brown: '#3B1F17',       // Toasted Cinnamon / Hot Cocoa
+              bark: '#2A150D'         // Deep Roast
+            }
+          },
+          fontFamily: {
+            prompt: ['Prompt', 'sans-serif'],
+            kanit: ['Kanit', 'sans-serif']
+          },
+          boxShadow: {
+            'xmas': '0 10px 30px -10px rgba(196, 30, 58, 0.25)',
+            'xmas-gold': '0 10px 25px -5px rgba(212, 175, 55, 0.35)',
+            'card-hover': '0 20px 35px -10px rgba(22, 91, 51, 0.22)'
+          },
+          animation: {
+            'snow-slow': 'snowfall 10s linear infinite',
+            'float-subtle': 'float 4s ease-in-out infinite',
+            'twinkle': 'twinkle 2.5s ease-in-out infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-6px)' }
+            },
+            twinkle: {
+              '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+              '50%': { opacity: '0.6', transform: 'scale(1.15)' }
             }
           }
         }
       }
     }
   </script>
+
   <style>
     body {
-      background-color: #f8fafc;
-      color: #1e293b;
+      font-family: 'Kanit', sans-serif;
+      background-color: #FDF7EC;
+      color: #2A150D;
     }
-    .line-clamp-2 {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+    h1, h2, h3, h4, h5, h6, .font-heading {
+      font-family: 'Prompt', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #FDF7EC;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #C41E3A;
+      border-radius: 4px;
+    }
+    .text-gradient-gold {
+      background: linear-gradient(135deg, #FDE047 0%, #D4AF37 50%, #F59E0B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .text-gradient-xmas {
+      background: linear-gradient(135deg, #C41E3A 0%, #E11D48 50%, #8B0000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Falling Snow Animation Canvas Background */
+    #snow-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 40;
+    }
+
+    /* Festive Ribbon Header Banner */
+    .candy-stripe {
+      background: repeating-linear-gradient(
+        45deg,
+        #C41E3A,
+        #C41E3A 12px,
+        #ffffff 12px,
+        #ffffff 24px,
+        #165B33 24px,
+        #165B33 36px,
+        #ffffff 36px,
+        #ffffff 48px
+      );
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans antialiased text-slate-800">
+<body class="custom-scrollbar antialiased overflow-x-hidden selection:bg-xmas-red selection:text-white">
 
-  <!-- Top Announcement Bar (Subtle) -->
-  <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 text-center tracking-wide">
-    ✨ ต้อนรับเปิดเทอม/อัปสกิลใหม่: สั่งซื้อหนังสือครบ 600 บาท จัดส่งฟรีทั่วประเทศ
+  <!-- Interactive Snow Canvas Overlay -->
+  <canvas id="snow-canvas"></canvas>
+
+  <!-- ================= TOP FESTIVE RIBBON BAR ================= -->
+  <div class="bg-gradient-to-r from-xmas-darkred via-xmas-red to-xmas-green text-white text-xs sm:text-sm py-2 px-4 text-center font-prompt relative z-50 overflow-hidden shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+      <i class="fa-solid fa-holly-berry text-yellow-300 animate-twinkle"></i>
+      <span class="font-semibold tracking-wide">
+        🎄 Merry Christmas & Happy New Year 2026 ❄️ เทศกาลส่งความสุข เปรม นมสด อบอุ่นตลอดหน้าหนาวนี้! 🎁
+      </span>
+      <i class="fa-solid fa-tree text-emerald-300 animate-twinkle hidden sm:inline"></i>
+    </div>
   </div>
 
-  <!-- Navigation Bar -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-      <!-- Logo -->
-      <a href="#" class="flex items-center gap-2.5 group">
-        <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold shadow-sm transition-transform group-hover:scale-105">
-          <i data-lucide="terminal" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <span class="text-xl font-bold tracking-tight text-slate-900">Byte<span class="text-blue-600">Books</span></span>
-          <span class="hidden sm:inline-block text-[11px] text-slate-400 font-normal ml-1.5 border-l border-slate-200 pl-2">หนังสือคอมพิวเตอร์</span>
-        </div>
-      </a>
-
-      <!-- Quick Search Bar (Desktop) -->
-      <div class="hidden md:flex flex-1 max-w-md mx-4 relative">
-        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-        <input 
-          id="desktopSearchInput"
-          type="text" 
-          placeholder="ค้นหาชื่อหนังสือ, ภาษาโค้ด, หรือผู้แต่ง..."
-          class="w-full bg-slate-100 hover:bg-slate-200/70 focus:bg-white text-sm text-slate-800 placeholder-slate-400 rounded-full pl-10 pr-4 py-2 border border-transparent focus:border-blue-500 focus:outline-none transition duration-150"
-          oninput="handleSearch(this.value)"
-        />
-        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="toggleWishlistModal()" class="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-full transition relative" title="รายการที่ถูกใจ">
-          <i data-lucide="heart" class="w-5 h-5"></i>
-          <span id="wishlistCount" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-semibold w-4 h-4 rounded-full flex items-center justify-center">0</span>
-        </button>
-
-        <button onclick="toggleCartDrawer()" class="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-full transition relative flex items-center gap-1.5" title="ตะกร้าสินค้า">
-          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-          <span id="cartCountBadge" class="hidden absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-semibold w-4 h-4 rounded-full flex items-center justify-center">0</span>
-        </button>
-
-        <a href="#about-section" class="hidden sm:inline-flex text-xs font-medium text-slate-600 hover:text-blue-600 py-1.5 px-3 rounded-lg border border-slate-200 hover:border-slate-300 transition">
-          คู่มือการเลือกเล่ม
+  <!-- ================= 1. NAVBAR ================= -->
+  <header id="navbar" class="sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b-2 border-xmas-red/20 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo & Brand Name with Santa Hat decoration -->
+        <a href="#hero" class="flex items-center gap-3.5 group">
+          <div class="relative w-13 h-13">
+            <!-- Santa Hat Badge -->
+            <span class="absolute -top-3.5 -left-2 text-2xl z-10 drop-shadow transform -rotate-12 group-hover:rotate-0 transition duration-300">
+              🎅
+            </span>
+            <div class="w-12 h-12 rounded-full overflow-hidden shadow-md ring-2 ring-xmas-red group-hover:ring-xmas-gold transition-all duration-300">
+              <img src="images/logo.png" alt="โลโก้ เปรม นมสด" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+            </div>
+          </div>
+          <div>
+            <span class="block font-heading font-bold text-2xl text-xmas-bark leading-tight group-hover:text-xmas-red transition">
+              เปรม <span class="text-xmas-red">นมสด</span> 
+              <span class="text-base text-xmas-gold">🎄</span>
+            </span>
+            <span class="block text-xs font-light text-xmas-green font-medium tracking-wider">
+              CHRISTMAS & TOAST CAFE
+            </span>
+          </div>
         </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-7 font-prompt text-base font-medium text-xmas-brown">
+          <a href="#hero" class="hover:text-xmas-red transition py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-xmas-red hover:after:w-full after:transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-snowflake text-xs text-blue-400"></i> หน้าแรก
+          </a>
+          <a href="#vibe" class="hover:text-xmas-red transition py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-xmas-red hover:after:w-full after:transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-tree text-xs text-xmas-green"></i> บรรยากาศคริสต์มาส
+          </a>
+          <a href="#features" class="hover:text-xmas-red transition py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-xmas-red hover:after:w-full after:transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-star text-xs text-xmas-gold"></i> จุดเด่น
+          </a>
+          <a href="#menu" class="hover:text-xmas-red transition py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-xmas-red hover:after:w-full after:transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-candy-cane text-xs text-xmas-red"></i> เมนูเทศกาล
+          </a>
+          <a href="#contact" class="hover:text-xmas-red transition py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-xmas-red hover:after:w-full after:transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-gift text-xs text-emerald-600"></i> ที่ตั้ง & ติดต่อ
+          </a>
+        </nav>
+
+        <!-- Right Action Button & Snow Toggle -->
+        <div class="hidden md:flex items-center gap-3">
+          <button id="toggle-snow-btn" type="button" class="px-3 py-2 rounded-full border border-xmas-green/30 bg-xmas-lightgreen/50 text-xmas-green text-xs font-medium hover:bg-xmas-lightgreen transition flex items-center gap-1.5" title="เปิด/ปิดหิมะ">
+            <i class="fa-solid fa-snowflake text-blue-500"></i>
+            <span>หิมะ: <b id="snow-status">เปิด</b></span>
+          </button>
+
+          <!-- Facebook Page Link Button -->
+          <a href="https://www.facebook.com/search/top?q=%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%A1%20%E0%B8%99%E0%B8%A1%E0%B8%AA%E0%B8%94" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-[#1877F2] hover:bg-[#166fe5] text-white px-4 py-2.5 rounded-full font-prompt font-medium shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5" title="ไปยังเพจ Facebook เปรม นมสด">
+            <i class="fa-brands fa-facebook text-lg"></i>
+            <span>เพจเฟสบุ๊ค</span>
+          </a>
+
+          <a href="tel:0812345678" class="inline-flex items-center gap-2 bg-gradient-to-r from-xmas-red via-red-600 to-xmas-darkred hover:from-xmas-darkred hover:to-xmas-red text-white px-4 py-2.5 rounded-full font-prompt font-semibold shadow-xmas hover:shadow-lg transition-all transform hover:-translate-y-0.5 border border-yellow-200/40">
+            <i class="fa-solid fa-bell text-yellow-300 animate-twinkle"></i>
+            <span>โทรสั่ง / จองโต๊ะ</span>
+          </a>
+        </div>
+
+        <!-- Mobile Hamburger Button -->
+        <div class="flex md:hidden items-center gap-2">
+          <button id="mobile-menu-btn" type="button" class="text-xmas-bark hover:text-xmas-red p-2 rounded-xl border border-xmas-red/20 focus:outline-none focus:ring-2 focus:ring-xmas-red/30 bg-xmas-lightred/30" aria-label="เปิดเมนู">
+            <i id="menu-icon" class="fa-solid fa-bars text-xl text-xmas-red"></i>
+          </button>
+        </div>
+
       </div>
     </div>
 
-    <!-- Mobile Search Bar -->
-    <div class="p-3 bg-white border-t border-slate-100 md:hidden">
-      <div class="relative">
-        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-        <input 
-          id="mobileSearchInput"
-          type="text" 
-          placeholder="ค้นหาชื่อหนังสือ เช่น Python, AI..."
-          class="w-full bg-slate-100 text-sm text-slate-800 placeholder-slate-400 rounded-full pl-10 pr-4 py-2 border border-transparent focus:border-blue-500 focus:outline-none"
-          oninput="handleSearch(this.value)"
-        />
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden bg-xmas-snow/98 backdrop-blur-xl border-b-2 border-xmas-red px-5 pt-3 pb-6 space-y-2.5 transition-all">
+      <a href="#hero" class="mobile-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-xmas-bark hover:bg-xmas-lightred hover:text-xmas-red">
+        <span class="text-xl">❄️</span> หน้าแรก
+      </a>
+      <a href="#vibe" class="mobile-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-xmas-bark hover:bg-xmas-lightgreen hover:text-xmas-green">
+        <span class="text-xl">🎄</span> บรรยากาศคริสต์มาส
+      </a>
+      <a href="#features" class="mobile-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-xmas-bark hover:bg-yellow-50 hover:text-amber-700">
+        <span class="text-xl">⭐</span> จุดเด่นความอร่อย
+      </a>
+      <a href="#menu" class="mobile-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-xmas-bark hover:bg-xmas-lightred hover:text-xmas-red">
+        <span class="text-xl">🎅</span> เมนูแนะนำเทศกาล
+      </a>
+      <a href="#contact" class="mobile-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-xmas-bark hover:bg-emerald-50 hover:text-emerald-700">
+        <span class="text-xl">🎁</span> ที่ตั้งร้าน & ช่องทางติดต่อ
+      </a>
+      <div class="pt-3 border-t border-xmas-red/20 space-y-2">
+        <!-- Facebook Page Button Mobile -->
+        <a href="https://www.facebook.com/search/top?q=%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%A1%20%E0%B8%99%E0%B8%A1%E0%B8%AA%E0%B8%94" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-[#1877F2] hover:bg-[#166fe5] text-white py-3 rounded-xl font-medium shadow-md transition">
+          <i class="fa-brands fa-facebook text-xl"></i>
+          <span>ไปยังเพจ Facebook: เปรม นมสด</span>
+        </a>
+        <a href="tel:0812345678" class="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-xmas-red to-xmas-darkred text-white py-3 rounded-xl font-medium shadow-md">
+          <i class="fa-solid fa-phone-volume text-yellow-300"></i>
+          <span>โทรสั่งด่วน: 081-234-5678</span>
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="bg-gradient-to-b from-white to-slate-50 border-b border-slate-200 py-12 sm:py-16">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 mb-4">
-        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-        คัดสรรเฉพาะเนื้อหาที่ทันสมัยและเข้าใจง่าย
+  <!-- ================= 2. HERO SECTION (CHRISTMAS THEME) ================= -->
+  <section id="hero" class="relative min-h-[92vh] flex items-center justify-center pt-20 pb-16 overflow-hidden">
+    
+    <!-- Background Image with Christmas Festive Overlay -->
+    <div class="absolute inset-0 z-0">
+      <img src="images/hero-bg.jpg" alt="บรรยากาศร้าน เปรม นมสด ตกแต่งคริสต์มาส" class="w-full h-full object-cover object-center filter brightness-90 scale-105">
+      <!-- Dark Forest Green & Wine Red Gradient Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-t from-xmas-darkgreen/95 via-xmas-darkred/70 to-black/60"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-400/20 via-transparent to-transparent"></div>
+    </div>
+
+    <!-- Festive Garlands Hanging Top Effect -->
+    <div class="absolute top-0 left-0 right-0 h-4 candy-stripe z-10 shadow-md"></div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white py-10">
+      
+      <!-- Top Tag Badge with Christmas Elements -->
+      <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-xmas-red/60 backdrop-blur-md border border-yellow-300/40 text-yellow-200 text-sm sm:text-base font-prompt font-semibold mb-6 shadow-xmas-gold animate-float-subtle">
+        <span>🎄</span>
+        <span>MERRY CHRISTMAS & COZY WINTER 2026</span>
+        <span>❄️</span>
       </div>
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
-        เริ่มต้นสายคอมฯ หรืออัปสกิลเทคโนโลยี<br class="hidden sm:inline" />
-        <span class="text-blue-600">ด้วยหนังสือที่ใช่และอ่านรู้เรื่อง</span>
+
+      <!-- Main Headline with Festive Accents -->
+      <h1 class="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight sm:leading-snug mb-6 drop-shadow-lg">
+        <span class="inline-block">เปรม นมสด</span> 
+        <span class="text-yellow-300 text-3xl sm:text-5xl">✨</span><br>
+        <span class="text-gradient-gold">
+          หอม หวาน มัน อบอุ่นรับคริสต์มาส
+        </span>
       </h1>
-      <p class="mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-        รวมคู่มือเขียนโปรแกรม ปัญญาประดิษฐ์ (AI) ความปลอดภัยไซเบอร์ ไปจนถึงพื้นฐานคอมพิวเตอร์ 
-        เน้นสรุปสาระสำคัญ พร้อมตัวอย่างโค้ดจริงที่นำไปใช้ได้ทันที
+
+      <!-- Sub-headline with Seasonal Twist -->
+      <p class="max-w-2xl mx-auto text-base sm:text-xl text-neutral-100 font-light leading-relaxed mb-10 drop-shadow">
+        จุดแวะพักเติมความสุข กับนมสดแท้ 100% ร้อนๆ คลายหนาว และขนมปังปิ้งเตาถ่านหอมกรุ่น<br class="hidden sm:inline">
+        ท่ามกลางบรรยากาศแสงไฟคริสต์มาสสุดโรแมนติก อบอวลด้วยรอยยิ้มตลอดเทศกาลส่งท้ายปี
       </p>
 
-      <!-- Quick Feature Badges -->
-      <div class="mt-8 flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-xs text-slate-500">
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
-          <span>มีโค้ดตัวอย่างดาวน์โหลดฟรี</span>
+      <!-- CTA Buttons (Festive Red & Forest Green) -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+        <a href="#menu" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-xmas-red to-red-600 hover:from-red-600 hover:to-xmas-darkred text-white text-lg font-prompt font-bold px-8 py-3.5 rounded-full shadow-xmas hover:shadow-2xl hover:-translate-y-1 transition duration-300 border-2 border-yellow-300/50">
+          <i class="fa-solid fa-gift text-yellow-300"></i>
+          <span>ดูเมนูพิเศษคริสต์มาส</span>
+        </a>
+        <a href="#vibe" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-xmas-green/80 hover:bg-xmas-green backdrop-blur-md text-white border-2 border-emerald-300/40 text-lg font-prompt font-medium px-8 py-3.5 rounded-full shadow-md hover:-translate-y-1 transition duration-300">
+          <i class="fa-solid fa-tree text-emerald-300"></i>
+          <span>ชมบรรยากาศร้าน</span>
+        </a>
+      </div>
+
+      <!-- Quick Facebook Link Pill -->
+      <div class="mt-5">
+        <a href="https://www.facebook.com/search/top?q=%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%A1%20%E0%B8%99%E0%B8%A1%E0%B8%AA%E0%B8%94" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1877F2]/80 hover:bg-[#1877F2] backdrop-blur-md text-white text-xs sm:text-sm font-medium shadow-md transition-all hover:scale-105 border border-white/40">
+          <i class="fa-brands fa-facebook text-base"></i>
+          <span>ติดตามข่าวสาร & โปรโมชั่นที่เพจ Facebook: เปรม นมสด</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5"></i>
+        </a>
+      </div>
+
+      <!-- Christmas Feature Badges -->
+      <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-white/20">
+        <div class="flex flex-col items-center p-3.5 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10 hover:border-yellow-300/40 transition">
+          <span class="text-2xl mb-1">🥛</span>
+          <span class="text-sm font-semibold text-yellow-200">นมสดแท้ 100%</span>
+          <span class="text-xs text-neutral-300">ตุ๋นร้อนๆ คลายลมหนาว</span>
         </div>
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
-          <span>อ่านตัวอย่างสารบัญได้ก่อนซื้อ</span>
+        <div class="flex flex-col items-center p-3.5 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10 hover:border-yellow-300/40 transition">
+          <span class="text-2xl mb-1">🍞</span>
+          <span class="text-sm font-semibold text-yellow-200">ปังปิ้งเตาถ่านหอมกรุ่น</span>
+          <span class="text-xs text-neutral-300">เนยฉ่ำ สังขยากวนสด</span>
         </div>
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
-          <span>จัดส่งรวดเร็ว มีทั้งเล่มพิมพ์และ E-Book</span>
+        <div class="flex flex-col items-center p-3.5 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10 hover:border-yellow-300/40 transition">
+          <span class="text-2xl mb-1">🎄</span>
+          <span class="text-sm font-semibold text-yellow-200">แสงไฟคริสต์มาส</span>
+          <span class="text-xs text-neutral-300">มุมถ่ายรูปเทศกาลเพียบ</span>
+        </div>
+        <div class="flex flex-col items-center p-3.5 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10 hover:border-yellow-300/40 transition">
+          <span class="text-2xl mb-1">🎅</span>
+          <span class="text-sm font-semibold text-yellow-200">เปิดบริการทุกวัน</span>
+          <span class="text-xs text-neutral-300">17:00 - 23:30 น.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scroll down indicator -->
+    <a href="#vibe" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/80 hover:text-yellow-300 flex flex-col items-center text-xs gap-1 transition animate-bounce">
+      <span>เลื่อนลงสัมผัสความอบอุ่น</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </a>
+  </section>
+
+  <!-- ================= 3. VIBE & ATMOSPHERE (CHRISTMAS WARMTH) ================= -->
+  <section id="vibe" class="py-20 bg-xmas-cream relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-xmas-red/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-xmas-green/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-xmas-lightgreen text-xmas-green font-semibold text-xs uppercase tracking-wider mb-3 border border-xmas-green/20">
+          <i class="fa-solid fa-tree"></i> Festive Winter Vibe
+        </div>
+        <h2 class="font-heading text-3xl sm:text-4xl font-bold text-xmas-bark mb-4">
+          แวะมานั่งชิลในบรรยากาศคริสต์มาสที่ <span class="text-xmas-red">เปรม นมสด</span> 🎅
+        </h2>
+        <div class="w-24 h-1.5 bg-gradient-to-r from-xmas-red via-yellow-400 to-xmas-green mx-auto rounded-full mb-4"></div>
+        <p class="text-xmas-brown/85 text-base sm:text-lg">
+          สัมผัสความอบอุ่นใต้แสงไฟระยิบระยับรับลมหนาว จะควงแขนคนพิเศษ มาสังสรรค์กับแก๊งเพื่อน หรือพาครอบครัวมาฉลองปีใหม่ ก็เปรมใจได้ในทุกคืน
+        </p>
+      </div>
+
+      <!-- Vibe Grid (5 Real Photos with Festive Frames) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        
+        <!-- Large Card 1 -->
+        <div class="md:col-span-2 lg:col-span-2 md:row-span-2 group relative overflow-hidden rounded-3xl shadow-xmas border-2 border-xmas-red/30 bg-white">
+          <div class="h-72 sm:h-96 md:h-full w-full overflow-hidden">
+            <img src="images/hero-bg.jpg" alt="บรรยากาศหน้าร้านเปรม นมสด" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-xmas-darkgreen/90 via-black/30 to-transparent flex flex-col justify-end p-6 text-white">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-3 py-1 rounded-full bg-xmas-red text-white text-xs font-semibold shadow">
+                🎄 จุดนัดพบเทศกาลคริสต์มาส
+              </span>
+              <span class="px-2.5 py-1 rounded-full bg-yellow-400/90 text-xmas-bark text-xs font-bold">
+                ⭐ แนะนำ
+              </span>
+            </div>
+            <h3 class="font-heading font-semibold text-xl sm:text-2xl mb-1 text-yellow-100">
+              แสงไฟวอร์มไลท์ อบอุ่นละมุนตารับลมหนาว
+            </h3>
+            <p class="text-sm text-neutral-200 font-light line-clamp-2">
+              บรรยากาศร้านตกแต่งต้อนรับเทศกาลปีใหม่ มีทั้งโซนแอร์เย็นสบายและโซนรับลมธรรมชาติหน้าร้าน
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="group relative overflow-hidden rounded-3xl shadow-md border border-xmas-green/20 bg-white h-64 sm:h-72">
+          <img src="images/vibe-1.jpg" alt="มุมที่นั่งภายในร้านเปรม นมสด" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
+            <span class="inline-block self-start px-2.5 py-0.5 rounded-full bg-xmas-green text-xs font-medium mb-1">
+              ❄️ มุมอบอุ่นในร้าน
+            </span>
+            <h3 class="font-heading font-medium text-lg">โต๊ะนั่งชิล สไตล์ Cozy Cafe</h3>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="group relative overflow-hidden rounded-3xl shadow-md border border-xmas-red/20 bg-white h-64 sm:h-72">
+          <img src="images/vibe-2.jpg" alt="มุมถ่ายรูปเช็คอิน เปรม นมสด" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
+            <span class="inline-block self-start px-2.5 py-0.5 rounded-full bg-xmas-red text-xs font-medium mb-1">
+              🎁 ถ่ายรูปเช็คอิน
+            </span>
+            <h3 class="font-heading font-medium text-lg">มุมถ่ายรูปสวย ปังทุกช็อต</h3>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="group relative overflow-hidden rounded-3xl shadow-md border border-yellow-500/20 bg-white h-64 sm:h-72">
+          <img src="images/vibe-3.jpg" alt="บรรยากาศเคาน์เตอร์และบาร์ร้าน" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
+            <span class="inline-block self-start px-2.5 py-0.5 rounded-full bg-yellow-600 text-xs font-medium mb-1">
+              ☕ บาร์นมสดตุ๋น
+            </span>
+            <h3 class="font-heading font-medium text-lg">กลิ่นนมสดหอมกรุ่นอบอวล</h3>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="group relative overflow-hidden rounded-3xl shadow-md border border-xmas-green/20 bg-white h-64 sm:h-72">
+          <img src="images/vibe-4.jpg" alt="บรรยากาศโต๊ะสังสรรค์ยามเย็น" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
+            <span class="inline-block self-start px-2.5 py-0.5 rounded-full bg-xmas-darkgreen text-xs font-medium mb-1">
+              🎉 สังสรรค์กลุ่มเพื่อน
+            </span>
+            <h3 class="font-heading font-medium text-lg">ฉลองค่ำคืนคริสต์มาสด้วยกัน</h3>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 4. OUR HIGHLIGHTS ================= -->
+  <section id="features" class="py-16 bg-white border-y-2 border-xmas-red/10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xmas-red font-semibold text-xs tracking-wider uppercase mb-1 block">
+          🎄 Warm & Joyful Delights 🎄
+        </span>
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold text-xmas-bark mb-2">
+          มนต์เสน่ห์ความอร่อยของ <span class="text-xmas-red">"เปรม นมสด"</span>
+        </h2>
+        <p class="text-xmas-brown/75 text-sm sm:text-base">
+          ส่งมอบความสุขและความอบอุ่น ผ่านรสชาติแท้ดั้งเดิมที่ใส่ใจในทุกรายละเอียด
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Feature 1 -->
+        <div class="p-8 rounded-3xl bg-xmas-snow border-2 border-xmas-red/20 shadow-sm hover:shadow-xmas transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+          <div class="absolute -right-4 -top-4 text-6xl text-red-100 select-none pointer-events-none">❄️</div>
+          <div class="w-16 h-16 rounded-2xl bg-red-100 text-xmas-red flex items-center justify-center text-3xl mb-6 shadow-inner">
+            <i class="fa-solid fa-mug-hot"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-xmas-bark mb-3">นมสดแท้ 100% ร้อนๆ คลายหนาว</h3>
+          <p class="text-xmas-brown/80 leading-relaxed text-sm">
+            นมโคสดแท้คุณภาพเยี่ยม ไม่ผสมนมผง ตุ๋นร้อนกรุ่นกำลังดี กลิ่นหอมมันธรรมชาติ เหมาะที่สุดสำหรับการจิบคลายลมหนาวในค่ำคืนเทศกาล
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="p-8 rounded-3xl bg-xmas-snow border-2 border-xmas-green/20 shadow-sm hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+          <div class="absolute -right-4 -top-4 text-6xl text-emerald-100 select-none pointer-events-none">🎄</div>
+          <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-xmas-green flex items-center justify-center text-3xl mb-6 shadow-inner">
+            <i class="fa-solid fa-bread-slice"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-xmas-bark mb-3">ขนมปังปิ้งเตาถ่านโบราณ หอมกรอบ</h3>
+          <p class="text-xmas-brown/80 leading-relaxed text-sm">
+            ปิ้งบนเตาถ่านแท้จนผิวกรอบสีทอง ชุ่มฉ่ำด้วยเนยสดแท้ ราดสังขยาใบเตยสดและซอสสูตรเด็ด หอมฟุ้งเย้ายวนใจทุกคำที่กัด
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="p-8 rounded-3xl bg-xmas-snow border-2 border-yellow-500/20 shadow-sm hover:shadow-xmas-gold transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+          <div class="absolute -right-4 -top-4 text-6xl text-yellow-100 select-none pointer-events-none">⭐</div>
+          <div class="w-16 h-16 rounded-2xl bg-yellow-100 text-amber-700 flex items-center justify-center text-3xl mb-6 shadow-inner">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-xmas-bark mb-3">ของขวัญแห่งความสุขและราคาเป็นมิตร</h3>
+          <p class="text-xmas-brown/80 leading-relaxed text-sm">
+            เริ่มต้นเพียง 35 บาท เติมเต็มความหวานให้ทุกคนได้อิ่มอร่อยอย่างมีความสุข พร้อมการบริการที่ยิ้มแย้มและอบอุ่นดั่งคนในครอบครัว
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 5. SIGNATURE MENU (CHRISTMAS EDITION) ================= -->
+  <section id="menu" class="py-20 bg-xmas-cream relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-xmas-lightred text-xmas-red font-semibold text-xs uppercase tracking-wider mb-3 border border-xmas-red/20">
+          <i class="fa-solid fa-candy-cane"></i> Christmas Menu Highlights
+        </div>
+        <h2 class="font-heading text-3xl sm:text-4xl font-bold text-xmas-bark mb-4">
+          เมนูแนะนำต้อนรับเทศกาลคริสต์มาส 🎅
+        </h2>
+        <div class="w-24 h-1.5 bg-gradient-to-r from-xmas-red via-yellow-400 to-xmas-green mx-auto rounded-full mb-4"></div>
+        <p class="text-xmas-brown/85 text-base sm:text-lg">
+          คัดสรร 7 เมนูซิกเนเจอร์สุดพิเศษที่พร้อมเติมเต็มความสุขในเทศกาลส่งท้ายปี หวานหอมกรุ่น ละมุนลิ้นในทุกเมนู
+        </p>
+
+        <!-- Filter Tags -->
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8">
+          <button class="menu-filter active px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-xmas-red text-white shadow-md border border-xmas-red" data-category="all">
+            🎄 ทั้งหมด (7 เมนูฉลองคริสต์มาส)
+          </button>
+          <button class="menu-filter px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white text-xmas-brown hover:bg-xmas-lightgreen hover:text-xmas-green border border-xmas-green/20" data-category="toast">
+            🍞 ขนมปังปิ้งเตาถ่าน & โทสต์
+          </button>
+          <button class="menu-filter px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white text-xmas-brown hover:bg-xmas-lightred hover:text-xmas-red border border-xmas-red/20" data-category="drink">
+            🥛 นมสดร้อนคลายหนาว & เครื่องดื่ม
+          </button>
+          <button class="menu-filter px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white text-xmas-brown hover:bg-yellow-50 hover:text-amber-700 border border-yellow-500/20" data-category="dessert">
+            ❄️ ปังเย็น & ของหวาน
+          </button>
+        </div>
+      </div>
+
+      <!-- Menu Grid (7 Real Images with Christmas Badges) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+        
+        <!-- Menu Item 1: สังขยาใบเตย (Christmas Green) -->
+        <div class="menu-card group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-card-hover border-2 border-emerald-600/30 transition-all duration-300 flex flex-col" data-item-category="toast">
+          <div class="relative overflow-hidden aspect-[4/3] bg-emerald-50">
+            <img src="images/menu-1.jpg" alt="ปังปิ้งเตาถ่านสังขยาใบเตยสด" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            <div class="absolute top-3 left-3 bg-xmas-green/95 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full shadow border border-emerald-300/40">
+              🌿 เขียวใบเตยคริสต์มาส
+            </div>
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-xmas-red font-heading font-extrabold text-sm px-3 py-1 rounded-full shadow">
+              ฿39
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-heading font-bold text-lg text-xmas-bark group-hover:text-xmas-green transition mb-2">
+                ปังปิ้งเตาถ่าน สังขยาใบเตยสด
+              </h3>
+              <p class="text-xmas-brown/75 text-xs sm:text-sm line-clamp-2 mb-4 leading-relaxed">
+                ขนมปังแผ่นหนาปิ้งเตาถ่านกรอบนอกนุ่มใน หอมควันถ่านเบาๆ ราดสังขยาใบเตยแท้สีเขียวธรรมชาติ เคี่ยวสดใหม่ หวานละมุน
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-3 border-t border-emerald-100">
+              <span class="text-xmas-green font-bold text-lg font-heading">฿39.-</span>
+              <span class="text-xs text-emerald-800 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-tree text-xmas-green"></i> ขายดีตลอดเทศกาล
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 2: ปังปิ้งเนยนมน้ำตาล (Christmas Gold) -->
+        <div class="menu-card group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xmas-gold border-2 border-yellow-500/30 transition-all duration-300 flex flex-col" data-item-category="toast">
+          <div class="relative overflow-hidden aspect-[4/3] bg-yellow-50">
+            <img src="images/menu-2.jpg" alt="ปังปิ้งเนยนมน้ำตาลฉ่ำเยิ้ม" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            <div class="absolute top-3 left-3 bg-amber-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              ⭐ เนยทองคำฉ่ำเยิ้ม
+            </div>
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-xmas-red font-heading font-extrabold text-sm px-3 py-1 rounded-full shadow">
+              ฿35
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-heading font-bold text-lg text-xmas-bark group-hover:text-amber-700 transition mb-2">
+                ปังปิ้งเนยนมน้ำตาล ฉ่ำเยิ้ม
+              </h3>
+              <p class="text-xmas-brown/75 text-xs sm:text-sm line-clamp-2 mb-4 leading-relaxed">
+                ทาเนยสดแท้ฉ่ำๆ ย่างจนชุ่มเนยหอมกรุ่น ราดนมข้นหวานเน้นๆ โรยน้ำตาลทรายแดงกรุบกรอบ รสชาติคลาสสิกที่ทุกคนคิดถึง
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-3 border-t border-yellow-100">
+              <span class="text-amber-700 font-bold text-lg font-heading">฿35.-</span>
+              <span class="text-xs text-amber-800 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-crown text-amber-500"></i> ยอดฮิตสั่งซ้ำ
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 3: ชาไทยนมสดเย็น -->
+        <div class="menu-card group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-card-hover border-2 border-orange-500/30 transition-all duration-300 flex flex-col" data-item-category="drink">
+          <div class="relative overflow-hidden aspect-[4/3] bg-orange-50">
+            <img src="images/menu-3.jpg" alt="ชาไทยนมสดเย็น สูตรเข้มข้น" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            <div class="absolute top-3 left-3 bg-orange-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              🍂 ชาไทยพรีเมียม
+            </div>
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-xmas-red font-heading font-extrabold text-sm px-3 py-1 rounded-full shadow">
+              ฿45
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-heading font-bold text-lg text-xmas-bark group-hover:text-orange-600 transition mb-2">
+                ชาไทยนมสดเย็น หอมเข้มมัน
+              </h3>
+              <p class="text-xmas-brown/75 text-xs sm:text-sm line-clamp-2 mb-4 leading-relaxed">
+                ใบชาแท้คั่วหอมสูตรเฉพาะ ผสมผสานนมสดแท้ 100% หวานมันกลมกล่อม ท็อปด้วยฟองนมนุ่มฟู ดื่มแล้วสดชื่นชื่นใจ
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-3 border-t border-orange-100">
+              <span class="text-orange-700 font-bold text-lg font-heading">฿45.-</span>
+              <span class="text-xs text-orange-800 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-star text-orange-500"></i> รสชาติเข้มข้น
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 4: ปังเย็นภูเขาไฟ (Snowy Chocolate Mountain) -->
+        <div class="menu-card group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xmas border-2 border-xmas-red/30 transition-all duration-300 flex flex-col" data-item-category="dessert">
+          <div class="relative overflow-hidden aspect-[4/3] bg-neutral-100">
+            <img src="images/menu-4.jpg" alt="ปังเย็นภูเขาไฟ โกโก้หนืด" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            <div class="absolute top-3 left-3 bg-xmas-darkred text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              ❄️ ภูเขาไฟหิมะช็อกโกแลต
+            </div>
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-xmas-red font-heading font-extrabold text-sm px-3 py-1 rounded-full shadow">
+              ฿69
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-heading font-bold text-lg text-xmas-bark group-hover:text-xmas-red transition mb-2">
+                ปังเย็นภูเขาไฟ โกโก้เข้มข้น
+              </h3>
+              <p class="text-xmas-brown/75 text-xs sm:text-sm line-clamp-2 mb-4 leading-relaxed">
+                เกล็ดหิมะเนียนนุ่มราดซอสโกโก้หนืดเข้มข้น รองด้วยขนมปังหั่นเต๋า โรยผงโกโก้พรีเมียม ถ้วยใหญ่ทานแชร์กันในกลุ่มเพื่อน
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-3 border-t border-red-100">
+              <span class="text-xmas-red font-bold text-lg font-heading">฿69.-</span>
+              <span class="text-xs text-red-800 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-gift text-xmas-red"></i> เมนูฉลองกลุ่มเพื่อน
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 5: นมสดร้อนแท้ 100% (Warm Winter Milk) -->
+        <div class="menu-card group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xmas border-2 border-xmas-red/30 transition-all duration-300 flex flex-col" data-item-category="drink">
+          <div class="relative overflow-hidden aspect-[4/3] bg-red-50">
+            <img src="images/menu-5.jpg" alt="นมสดร้อนแท้ 100% ต้นตำรับ" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            <div class="absolute top-3 left-3 bg-xmas-red text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              🎅 นมร้อนคลายหนาว
+            </div>
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-xmas-red font-heading font-extrabold text-sm px-3 py-1 rounded-full shadow">
+              ฿35
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-heading font-bold text-lg text-xmas-bark group-hover:text-xmas-red transition mb-2">
+                นมสดร้อนแท้ 100% (แถมขนมปัง)
+              </h3>
+              <p class="text-xmas-brown/75 text-xs sm:text-sm line-clamp-2 mb-4 leading-relaxed">
+                นมโคสดแท้ตุ๋นอุณหภูมิคงที่ มีฟองนมนุ่มลอยด้านบน เสิร์ฟร้อนๆ คู่ขนมปังแผ่นจิ้ม อุ่นท้อง สบายใจในค่ำคืนเทศกาล
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-3 border-t border-red-100">
+              <span class="text-xmas-red font-bold text-lg font-heading">฿35.-</span>
+              <span class="text-xs text-red-800 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-heart text-xmas-red"></i> สุขภาพดี & อบอุ่น
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 6: โทสต์คาราเมลเนยสด ไอศกรีม (Christmas Feast Toast) -->
+        <div class="menu-card group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xmas-gold border-2 border-yellow-500/30 transition-all duration-300 flex flex-col" data-item-category="toast">
+          <div class="relative overflow-hidden aspect-[4/3] bg-yellow-50">
+            <img src="images/menu-6.jpg" alt="โทสต์เนยสดคาราเมล ไอศกรีม" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            <div class="absolute top-3 left-3 bg-amber-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              🎉 ซิกเนเจอร์พรีเมียม
+            </div>
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-xmas-red font-heading font-extrabold text-sm px-3 py-1 rounded-full shadow">
+              ฿89
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-heading font-bold text-lg text-xmas-bark group-hover:text-amber-700 transition mb-2">
+                โทสต์เนยสดคาราเมล ไอศกรีม
+              </h3>
+              <p class="text-xmas-brown/75 text-xs sm:text-sm line-clamp-2 mb-4 leading-relaxed">
+                ขนมปังโทสต์ก้อนหนาปิ้งกรอบเนยชุ่มฉ่ำ ราดซอสคาราเมลโฮมเมด เสิร์ฟพร้อมไอศกรีมวานิลลาและวิปครีมดั่งหิมะนุ่มฟู
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-3 border-t border-yellow-100">
+              <span class="text-amber-700 font-bold text-lg font-heading">฿89.-</span>
+              <span class="text-xs text-amber-800 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-cake-candles text-amber-500"></i> ฉลองเทศกาลฟินๆ
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 7: นมสดสตรอว์เบอร์รี (Santa Berry Milk) -->
+        <div class="menu-card group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xmas border-2 border-rose-500/30 transition-all duration-300 flex flex-col" data-item-category="drink">
+          <div class="relative overflow-hidden aspect-[4/3] bg-rose-50">
+            <img src="images/menu-7.jpg" alt="นมสดสตรอว์เบอร์รี ลาวา ซานต้า" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            <div class="absolute top-3 left-3 bg-rose-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              🍓 สตรอว์เบอร์รีซานต้า
+            </div>
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-xmas-red font-heading font-extrabold text-sm px-3 py-1 rounded-full shadow">
+              ฿50
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-heading font-bold text-lg text-xmas-bark group-hover:text-rose-600 transition mb-2">
+                นมสดสตรอว์เบอร์รี ลาวา
+              </h3>
+              <p class="text-xmas-brown/75 text-xs sm:text-sm line-clamp-2 mb-4 leading-relaxed">
+                นมสดแท้เลเยอร์ด้วยซอสสตรอว์เบอร์รีเคี่ยวเนื้อผลไม้สีแดงสดใส รสเปรี้ยวอมหวานสดชื่น เข้ากับบรรยากาศคริสต์มาสสุดๆ
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-3 border-t border-rose-100">
+              <span class="text-rose-600 font-bold text-lg font-heading">฿50.-</span>
+              <span class="text-xs text-rose-800 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-wand-magic-sparkles text-rose-500"></i> สดชื่นต้อนรับปีใหม่
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Additional Note -->
+      <div class="mt-12 text-center">
+        <p class="text-xmas-brown/80 text-sm">
+          🎄 มีเมนูเครื่องดื่มและของหวานอื่นๆ ให้เลือกลิ้มลองอีกกว่า 30 รายการที่หน้าร้าน พร้อมกล่องของขวัญและแพ็กเกจพิเศษสำหรับเทศกาล
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 6. CHRISTMAS PROMOTION CALLOUT BANNER ================= -->
+  <section class="py-14 bg-gradient-to-r from-xmas-darkred via-xmas-red to-xmas-green text-white relative overflow-hidden shadow-inner">
+    <!-- Snowflake background decorations -->
+    <div class="absolute -right-10 -bottom-10 text-9xl text-white/10 select-none pointer-events-none">❄️</div>
+    <div class="absolute -left-10 -top-10 text-9xl text-white/10 select-none pointer-events-none">🎄</div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div class="max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-yellow-200 text-xs sm:text-sm font-semibold mb-4 border border-yellow-300/30">
+          <span>🎁</span> CHRISTMAS SPECIAL PRIVILEGE <span>🎁</span>
+        </div>
+        <h3 class="font-heading text-2xl sm:text-4xl font-extrabold mb-3 leading-snug drop-shadow-md">
+          แต่งตัวธีม คริสต์มาส (แดง/เขียว) แวะมาเช็คอิน<br>
+          <span class="text-yellow-300">รับส่วนลดทันที 10% หรือฟรีวิปครีมหิมะ!</span>
+        </h3>
+        <p class="text-neutral-100 text-sm sm:text-base font-light mb-8 max-w-xl mx-auto">
+          เพียงถ่ายรูปคู่กับเมนูโปรดหรือมุมต้นคริสต์มาสในร้าน โพสต์ลง Facebook หรือ Instagram พร้อมแท็กเพจ <strong class="underline font-bold text-yellow-200">เปรม นมสด</strong>
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="https://www.facebook.com/search/top?q=%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%A1%20%E0%B8%99%E0%B8%A1%E0%B8%AA%E0%B8%94" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#1877F2] hover:bg-[#166fe5] text-white font-prompt font-bold px-8 py-3.5 rounded-full shadow-lg transition transform hover:-translate-y-0.5 border border-white/30">
+            <i class="fa-brands fa-facebook text-xl"></i>
+            <span>ไปยังเพจ Facebook เปรม นมสด</span>
+          </a>
+          <a href="#contact" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-xmas-darkred font-prompt font-bold px-8 py-3.5 rounded-full shadow-lg transition transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>ดูพิกัดร้าน & แผนที่</span>
+          </a>
+          <a href="tel:0812345678" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 border border-white/50 text-white font-prompt font-medium px-8 py-3.5 rounded-full transition">
+            <i class="fa-solid fa-phone"></i>
+            <span>โทรสั่งล่วงหน้า</span>
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Main Content Area -->
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
-    
-    <!-- Category Filter Tabs & Sort -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
-      <!-- Category Pills -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-none" id="categoryButtons">
-        <!-- Rendered dynamically via JS -->
-      </div>
-
-      <!-- Sorting dropdown -->
-      <div class="flex items-center gap-2 self-end sm:self-auto text-xs text-slate-500">
-        <label for="sortSelect">เรียงตาม:</label>
-        <select id="sortSelect" onchange="handleSort(this.value)" class="bg-white border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500">
-          <option value="popular">ยอดนิยม</option>
-          <option value="newest">มาใหม่ล่าสุด</option>
-          <option value="price-asc">ราคา: ต่ำ - สูง</option>
-          <option value="price-desc">ราคา: สูง - ต่ำ</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Active Filters & Result Count -->
-    <div class="flex items-center justify-between py-4 text-xs text-slate-500">
-      <div id="resultCountText">กำลังแสดง 0 รายการ</div>
-      <button id="resetFilterBtn" onclick="resetFilters()" class="hidden text-blue-600 hover:underline">
-        ล้างตัวกรองทั้งหมด
-      </button>
-    </div>
-
-    <!-- Book Grid -->
-    <div id="bookGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-      <!-- Book cards populated via JS -->
-    </div>
-
-    <!-- Empty State -->
-    <div id="emptyState" class="hidden text-center py-16">
-      <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
-        <i data-lucide="book-open" class="w-8 h-8"></i>
-      </div>
-      <h3 class="text-base font-semibold text-slate-800">ไม่พบหนังสือที่ตรงกับคำค้นหา</h3>
-      <p class="text-xs text-slate-500 mt-1">ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่อื่นดูนะครับ</p>
-      <button onclick="resetFilters()" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition">
-        แสดงหนังสือทั้งหมด
-      </button>
-    </div>
-
-    <!-- Recommendation Guide Section -->
-    <section id="about-section" class="mt-16 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8">
-      <div class="max-w-2xl">
-        <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Guide for Beginners</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">มือใหม่หัดเริ่มเรียนคอมพิวเตอร์ ควรเริ่มเล่มไหนก่อน?</h2>
-        <p class="text-sm text-slate-600 mt-2 leading-relaxed">
-          หากคุณยังไม่แน่ใจว่าจะเริ่มต้นเรียนด้านไหน เราแบ่งเส้นทางการศึกษาออกเป็น 3 สายหลักที่แนะนำ:
+  <!-- ================= 7. LOCATION & CONTACT (CHRISTMAS THEME) ================= -->
+  <section id="contact" class="py-20 bg-xmas-snow relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-xmas-lightgreen text-xmas-green font-semibold text-xs uppercase tracking-wider mb-3 border border-xmas-green/20">
+          <i class="fa-solid fa-gift"></i> Christmas Location & Hours
+        </div>
+        <h2 class="font-heading text-3xl sm:text-4xl font-bold text-xmas-bark mb-4">
+          ที่ตั้งร้านและช่องทางติดต่อ 📍
+        </h2>
+        <div class="w-24 h-1.5 bg-gradient-to-r from-xmas-red via-yellow-400 to-xmas-green mx-auto rounded-full mb-4"></div>
+        <p class="text-xmas-brown/85 text-base sm:text-lg">
+          เดินทางสะดวก ใจกลางเมืองบุรีรัมย์ เปิดต้อนรับตลอดช่วงเทศกาลวันหยุดยาว แวะมาเติมความอบอุ่นได้ทุกค่ำคืน
         </p>
       </div>
 
-      <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-200 transition">
-          <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm mb-3">1</div>
-          <h3 class="text-sm font-semibold text-slate-900">สายเขียนโปรแกรม (Programming)</h3>
-          <p class="text-xs text-slate-500 mt-1 leading-relaxed">แนะนำเริ่มที่ภาษา <strong>Python</strong> หรือ <strong>JavaScript</strong> เพื่อเข้าใจตรรกะและลอจิก ก่อนต่อยอดสู่ Web/App Dev</p>
-        </div>
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-purple-200 transition">
-          <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-sm mb-3">2</div>
-          <h3 class="text-sm font-semibold text-slate-900">สายข้อมูล & AI (Data & AI)</h3>
-          <p class="text-xs text-slate-500 mt-1 leading-relaxed">เริ่มต้นด้วย <strong>SQL & Python สำหรับจัดการข้อมูล</strong> ต่อด้วย Machine Learning และ Generative AI</p>
-        </div>
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-emerald-200 transition">
-          <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm mb-3">3</div>
-          <h3 class="text-sm font-semibold text-slate-900">สายระบบ & เน็ตเวิร์ก (DevOps & Security)</h3>
-          <p class="text-xs text-slate-500 mt-1 leading-relaxed">ปูพื้นฐานจาก <strong>Computer Architecture & Network</strong> แล้วต่อด้วย Docker, Linux และ Cloud</p>
-        </div>
-      </div>
-    </section>
+      <!-- 2 Columns Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+        
+        <!-- Left Column: Store Info & Socials (7 cols) -->
+        <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- Address Card -->
+            <div class="p-6 rounded-3xl bg-white border-2 border-xmas-red/20 shadow-sm hover:shadow-md transition">
+              <div class="w-12 h-12 rounded-2xl bg-red-100 text-xmas-red flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-map-location-dot"></i>
+              </div>
+              <h4 class="font-heading font-bold text-lg text-xmas-bark mb-2">ที่อยู่ร้าน</h4>
+              <p class="text-xmas-brown/80 text-sm leading-relaxed">
+                ถนนจิระ ตำบลในเมือง อำเภอเมืองบุรีรัมย์ จังหวัดบุรีรัมย์ 31000<br>
+                <span class="text-xs text-xmas-red font-medium mt-1 inline-block">📍 สังเกตป้ายไฟ "เปรม นมสด" ตกแต่งคริสต์มาส</span>
+              </p>
+            </div>
 
-  </main>
+            <!-- Business Hours Card -->
+            <div class="p-6 rounded-3xl bg-white border-2 border-xmas-green/20 shadow-sm hover:shadow-md transition">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-xmas-green flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-clock"></i>
+              </div>
+              <h4 class="font-heading font-bold text-lg text-xmas-bark mb-2">เวลาเปิด-ปิดเทศกาล</h4>
+              <p class="text-xmas-brown/80 text-sm leading-relaxed">
+                เปิดบริการทุกวัน (ไม่มีวันหยุดเทศกาล)<br>
+                <strong class="text-xmas-bark text-base">17:00 - 23:30 น.</strong><br>
+                <span class="text-xs text-emerald-700 font-semibold">● เปิดให้บริการตามปกติตลอดช่วงปีใหม่</span>
+              </p>
+            </div>
 
-  <!-- Footer -->
-  <footer class="bg-white border-t border-slate-200 mt-16 text-xs text-slate-500">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
-          <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
-        </div>
-        <span class="font-semibold text-slate-700">ByteBooks</span>
-        <span>— แหล่งรวมหนังสือคอมพิวเตอร์และคู่มือโปรแกรมเมอร์</span>
-      </div>
-      <div>
-        ออกแบบด้วยแนวคิด Minimal & Clean UX/UI • เรียบง่าย สบายตา ค้นหาง่าย
-      </div>
-    </div>
-  </footer>
+            <!-- Phone Card -->
+            <div class="p-6 rounded-3xl bg-white border-2 border-yellow-500/20 shadow-sm hover:shadow-md transition">
+              <div class="w-12 h-12 rounded-2xl bg-yellow-100 text-amber-700 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-phone-volume"></i>
+              </div>
+              <h4 class="font-heading font-bold text-lg text-xmas-bark mb-2">เบอร์โทรติดต่อ</h4>
+              <p class="text-xmas-brown/80 text-sm leading-relaxed mb-3">
+                จองโต๊ะกลุ่มใหญ่ / สั่งกลับบ้าน
+              </p>
+              <a href="tel:0812345678" class="inline-flex items-center gap-2 font-heading font-bold text-xmas-red text-lg hover:underline">
+                <i class="fa-solid fa-phone text-sm"></i> 081-234-5678
+              </a>
+            </div>
 
-  <!-- Book Detail Modal -->
-  <div id="bookModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
-      <!-- Modal Header -->
-      <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-        <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider" id="modalCategory">หมวดหมู่</span>
-        <button onclick="closeBookModal()" class="text-slate-400 hover:text-slate-700 p-1 rounded-full hover:bg-slate-100">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
+            <!-- Parking & Facilities Card -->
+            <div class="p-6 rounded-3xl bg-white border-2 border-blue-500/20 shadow-sm hover:shadow-md transition">
+              <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-snowflake"></i>
+              </div>
+              <h4 class="font-heading font-bold text-lg text-xmas-bark mb-2">บริการ & สิ่งอำนวยความสะดวก</h4>
+              <p class="text-xmas-brown/80 text-sm leading-relaxed">
+                ✓ ที่จอดรถสะดวกสบายริมถนน<br>
+                ✓ ห้องแอร์เย็นสบาย & Wi-Fi ฟรี<br>
+                ✓ รับเงินสด & โอนสแกน QR Code
+              </p>
+            </div>
 
-      <!-- Modal Body (Scrollable) -->
-      <div class="p-6 overflow-y-auto space-y-4 text-slate-700 text-sm">
-        <div class="flex gap-4">
-          <div id="modalCover" class="w-24 h-32 rounded-lg flex items-center justify-center text-white font-bold p-2 text-center text-xs shrink-0 shadow-sm">
-            <!-- Render cover here -->
           </div>
-          <div>
-            <h3 id="modalTitle" class="text-lg font-bold text-slate-900 leading-snug">ชื่อหนังสือ</h3>
-            <p id="modalAuthor" class="text-xs text-slate-500 mt-1">ผู้แต่ง</p>
-            <div class="flex items-center gap-2 mt-2">
-              <span id="modalPrice" class="text-base font-bold text-blue-600">฿350</span>
-              <span id="modalFormat" class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">เล่มพิมพ์ + PDF</span>
+
+          <!-- Social Media & Delivery Links -->
+          <div class="p-6 sm:p-8 rounded-3xl bg-white border-2 border-xmas-red/20 shadow-sm">
+            <h4 class="font-heading font-bold text-lg text-xmas-bark mb-4 flex items-center gap-2">
+              <span>ติดตามข่าวสาร & สั่งเดลิเวอรี</span>
+              <span class="text-sm">🎅</span>
+            </h4>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+              <!-- Facebook -->
+              <a href="https://www.facebook.com/search/top?q=%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%A1%20%E0%B8%99%E0%B8%A1%E0%B8%AA%E0%B8%94" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-blue-50 hover:bg-[#1877F2] text-blue-700 hover:text-white transition-all group border-2 border-blue-200 hover:shadow-lg">
+                <i class="fa-brands fa-facebook text-3xl text-[#1877F2] group-hover:text-white transition"></i>
+                <div class="text-left">
+                  <span class="block text-xs font-light text-blue-500 group-hover:text-blue-100">Official Facebook</span>
+                  <span class="block text-sm font-bold">เพจ เปรม นมสด <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-0.5"></i></span>
+                </div>
+              </a>
+
+              <!-- LINE -->
+              <a href="https://line.me" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white transition-all group border-2 border-emerald-200 hover:shadow-lg">
+                <i class="fa-brands fa-line text-3xl text-emerald-600 group-hover:text-white transition"></i>
+                <div class="text-left">
+                  <span class="block text-xs font-light text-emerald-500 group-hover:text-emerald-100">LINE Official</span>
+                  <span class="block text-sm font-bold">@premnomsod</span>
+                </div>
+              </a>
+
+              <!-- Instagram -->
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-pink-50 hover:bg-pink-600 text-pink-600 hover:text-white transition-all group border-2 border-pink-200 hover:shadow-lg">
+                <i class="fa-brands fa-instagram text-3xl text-pink-600 group-hover:text-white transition"></i>
+                <div class="text-left">
+                  <span class="block text-xs font-light text-pink-500 group-hover:text-pink-100">Instagram</span>
+                  <span class="block text-sm font-bold">prem.nomsod</span>
+                </div>
+              </a>
+            </div>
+
+            <!-- Delivery Apps Badges -->
+            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-neutral-100">
+              <span class="text-xs text-xmas-brown/70 font-medium">สั่งฉลองที่บ้านผ่านแอป:</span>
+              <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">
+                <i class="fa-solid fa-motorcycle mr-1"></i> GrabFood
+              </span>
+              <span class="px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
+                <i class="fa-solid fa-bicycle mr-1"></i> LINE MAN
+              </span>
+              <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-800 text-xs font-medium">
+                <i class="fa-solid fa-box mr-1"></i> ShopeeFood
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right Column: Interactive Map (5 cols) -->
+        <div class="lg:col-span-5 flex flex-col">
+          <div class="h-full min-h-[360px] sm:min-h-[420px] rounded-3xl overflow-hidden shadow-xmas border-2 border-xmas-red/30 relative flex flex-col bg-white">
+            <!-- Map Tag -->
+            <div class="p-4 bg-white/95 backdrop-blur-md border-b border-neutral-100 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-tree text-xmas-green"></i>
+                <span class="font-heading font-semibold text-sm text-xmas-bark">แผนที่ร้าน เปรม นมสด (Google Maps)</span>
+              </div>
+              <a href="https://maps.google.com/?q=Buriram+Jira+Road" target="_blank" rel="noopener noreferrer" class="text-xs text-xmas-red hover:underline font-medium">
+                เปิดแผนที่ใหญ่ <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+              </a>
+            </div>
+            
+            <!-- Google Maps Embed Iframe -->
+            <div class="flex-1 w-full relative">
+              <iframe 
+                title="แผนที่ร้าน เปรม นมสด"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15444.82194639962!2d103.0950!3d14.9950!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x311995a1a1a1a1a1%3A0x1234567890abcdef!2z4LiW4LiZ4LiZ4LiI4Li04Lij4LiwIOC4leC4s-C4muC4pSDguKHgulicense4LiZ4Lia4Li44Lij4Li1IOC4reC4s-C5gOC4nuC4reC5gOC4oeC4t-C4reC4hyDguYLguKjguKPguKPguLHguKHguKIgMzEwMDA!5e0!3m2!1sth!2sth!4v1700000000000!5m2!1sth!2sth" 
+                class="w-full h-full border-0 absolute inset-0"
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
+
+            <!-- Map Footer Overlay -->
+            <div class="p-4 bg-white/95 backdrop-blur-md border-t border-neutral-100 flex items-center justify-between">
+              <span class="text-xs text-xmas-brown/70">
+                <i class="fa-solid fa-car-side text-xmas-green mr-1"></i> มีที่จอดรถริมถนน
+              </span>
+              <a href="https://maps.google.com/?q=Buriram+Jira+Road" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-xmas-red to-xmas-darkred text-white text-xs font-semibold hover:shadow transition">
+                <i class="fa-solid fa-diamond-turn-right text-yellow-300"></i>
+                <span>นำทางมาร้าน</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 8. FOOTER ================= -->
+  <footer class="bg-xmas-darkgreen text-neutral-200 pt-16 pb-12 border-t-4 border-xmas-red relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="md:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <span class="absolute -top-3 -left-2 text-xl">🎅</span>
+              <img src="images/logo.png" alt="โลโก้ เปรม นมสด" class="w-12 h-12 rounded-full object-cover ring-2 ring-yellow-400">
+            </div>
+            <div>
+              <span class="block font-heading font-bold text-2xl text-white">
+                เปรม <span class="text-xmas-red">นมสด</span> 
+                <span class="text-base text-yellow-300">🎄</span>
+              </span>
+              <span class="block text-xs text-emerald-300 tracking-wider">
+                MERRY CHRISTMAS & HAPPY NEW YEAR 2026
+              </span>
             </div>
           </div>
+          <p class="text-neutral-300 text-sm max-w-md leading-relaxed font-light">
+            จุดแวะพักเติมความอบอุ่นในเทศกาลคริสต์มาสและปีใหม่ กับนมสดแท้ 100% ตุ๋นร้อนๆ และขนมปังปิ้งเตาถ่านโบราณหอมกรุ่น เพื่อให้ทุกค่ำคืนของคุณเปรมสุขที่สุด
+          </p>
+          <div class="flex items-center gap-3 pt-2">
+            <a href="https://www.facebook.com/search/top?q=%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%A1%20%E0%B8%99%E0%B8%A1%E0%B8%AA%E0%B8%94" target="_blank" rel="noopener noreferrer" class="h-10 px-3.5 rounded-full bg-[#1877F2] hover:bg-[#166fe5] text-white flex items-center justify-center gap-2 text-xs font-medium shadow transition" aria-label="เพจ Facebook เปรม นมสด" title="ไปยังเพจ Facebook เปรม นมสด">
+              <i class="fa-brands fa-facebook-f text-sm"></i>
+              <span>เพจ เปรม นมสด</span>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/10 hover:bg-pink-600 text-white flex items-center justify-center transition" aria-label="Instagram">
+              <i class="fa-brands fa-instagram text-sm"></i>
+            </a>
+            <a href="https://line.me" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center transition" aria-label="LINE">
+              <i class="fa-brands fa-line text-sm"></i>
+            </a>
+          </div>
         </div>
 
+        <!-- Col 2: Quick Links -->
         <div>
-          <h4 class="text-xs font-semibold text-slate-900 uppercase tracking-wide mb-1">เนื้อหาโดยย่อ</h4>
-          <p id="modalDesc" class="text-xs text-slate-600 leading-relaxed"></p>
-        </div>
-
-        <div>
-          <h4 class="text-xs font-semibold text-slate-900 uppercase tracking-wide mb-1.5">หัวข้อเด่นในเล่ม (สารบัญย่อ)</h4>
-          <ul id="modalTOC" class="text-xs text-slate-600 space-y-1 list-disc list-inside bg-slate-50 p-3 rounded-lg border border-slate-100">
+          <h4 class="font-heading font-semibold text-yellow-300 text-base mb-4 tracking-wide">
+            เมนูลัด
+          </h4>
+          <ul class="space-y-2 text-sm text-neutral-300 font-light">
+            <li><a href="#hero" class="hover:text-yellow-300 transition">❄️ หน้าแรก</a></li>
+            <li><a href="#vibe" class="hover:text-yellow-300 transition">🎄 บรรยากาศคริสต์มาส</a></li>
+            <li><a href="#features" class="hover:text-yellow-300 transition">⭐ จุดเด่นของเรา</a></li>
+            <li><a href="#menu" class="hover:text-yellow-300 transition">🎅 เมนูแนะนำเทศกาล</a></li>
+            <li><a href="#contact" class="hover:text-yellow-300 transition">🎁 ที่ตั้ง & ติดต่อ</a></li>
           </ul>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 text-center text-[11px] text-slate-500 pt-2 border-t border-slate-100">
-          <div class="bg-slate-50 py-2 rounded-lg">
-            <span class="block font-semibold text-slate-700" id="modalPages">320 หน้า</span>
-            จำนวนหน้า
-          </div>
-          <div class="bg-slate-50 py-2 rounded-lg">
-            <span class="block font-semibold text-slate-700" id="modalLevel">ผู้เริ่มต้น - ปานกลาง</span>
-            ระดับความเหมาะสม
-          </div>
+        <!-- Col 3: Contact & Hours -->
+        <div>
+          <h4 class="font-heading font-semibold text-yellow-300 text-base mb-4 tracking-wide">
+            เวลาบริการช่วงเทศกาล
+          </h4>
+          <ul class="space-y-3 text-sm text-neutral-300 font-light">
+            <li class="flex items-start gap-2.5">
+              <i class="fa-solid fa-clock text-yellow-300 mt-1"></i>
+              <span>เปิดบริการทุกวัน: 17:00 - 23:30 น.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i class="fa-solid fa-phone text-yellow-300 mt-1"></i>
+              <a href="tel:0812345678" class="hover:text-white transition">081-234-5678</a>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i class="fa-solid fa-location-dot text-yellow-300 mt-1"></i>
+              <span>ถ.จิระ ต.ในเมือง อ.เมือง บุรีรัมย์</span>
+            </li>
+          </ul>
         </div>
+
       </div>
 
-      <!-- Modal Footer -->
-      <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
-        <button id="modalWishlistBtn" onclick="toggleWishlistFromModal()" class="px-3 py-2 text-slate-600 hover:text-rose-500 hover:bg-slate-200/60 rounded-lg text-xs font-medium flex items-center gap-1.5 transition">
-          <i data-lucide="heart" class="w-4 h-4"></i>
-          <span>บันทึกถูกใจ</span>
-        </button>
-        <button id="modalAddToCartBtn" onclick="addToCartFromModal()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5 shadow-sm">
-          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-          <span>เพิ่มลงตะกร้า</span>
-        </button>
+      <!-- Bottom Copyright & Back to top -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-400 gap-4">
+        <p>
+          Copyright &copy; 2026 <span class="text-white font-medium">เปรม นมสด</span>. All rights reserved. 🎄 Wishing you a Merry Christmas!
+        </p>
+        <a href="#hero" class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-yellow-300 transition">
+          <span>กลับสู่ด้านบน</span>
+          <i class="fa-solid fa-chevron-up"></i>
+        </a>
       </div>
+
     </div>
+  </footer>
+
+  <!-- ================= FLOATING ACTION BUTTONS ================= -->
+  <div class="fixed bottom-6 right-6 z-40 flex flex-col gap-3 items-center">
+    <!-- Facebook Page Floating Button -->
+    <a href="https://www.facebook.com/search/top?q=%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%A1%20%E0%B8%99%E0%B8%A1%E0%B8%AA%E0%B8%94" target="_blank" rel="noopener noreferrer" class="w-13 h-13 p-3 rounded-full bg-[#1877F2] text-white shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center group border-2 border-white" aria-label="เปิดเพจเฟสบุ๊ค เปรม นมสด" title="เปิดเพจ Facebook เปรม นมสด">
+      <i class="fa-brands fa-facebook-f text-2xl group-hover:scale-110 transition"></i>
+    </a>
+
+    <!-- Call Button with Santa Bell pulse -->
+    <a href="tel:0812345678" class="w-14 h-14 rounded-full bg-gradient-to-r from-xmas-red to-red-600 text-white shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center group border-2 border-yellow-300" aria-label="โทรสั่งเลย" title="โทรสั่งด่วน">
+      <i class="fa-solid fa-phone-volume text-xl group-hover:rotate-12 transition text-yellow-200"></i>
+    </a>
   </div>
 
-  <!-- Cart Drawer -->
-  <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm">
-    <div class="absolute right-0 top-0 bottom-0 max-w-sm w-full bg-white shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
-      <div class="p-4 border-b border-slate-200 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i data-lucide="shopping-bag" class="w-5 h-5 text-blue-600"></i>
-          <h3 class="font-bold text-slate-900 text-sm">ตะกร้าสินค้า</h3>
-          <span id="cartCountHeader" class="text-xs text-slate-400">(0 รายการ)</span>
-        </div>
-        <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-slate-600 p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- Cart Items -->
-      <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 space-y-3">
-        <!-- Rendered dynamically -->
-      </div>
-
-      <!-- Cart Footer -->
-      <div class="p-4 border-t border-slate-200 bg-slate-50">
-        <div class="flex justify-between text-xs text-slate-500 mb-1">
-          <span>ค่าจัดส่ง</span>
-          <span class="text-emerald-600 font-medium">ฟรี</span>
-        </div>
-        <div class="flex justify-between text-sm font-bold text-slate-900 mb-4">
-          <span>ยอดรวมทั้งหมด</span>
-          <span id="cartTotalPrice" class="text-blue-600 text-base">฿0</span>
-        </div>
-        <button onclick="checkout()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg text-xs font-semibold tracking-wide shadow-sm transition">
-          ดำเนินการชำระเงิน
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-slate-900 text-white text-xs px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2 transition-all">
-    <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
-    <span id="toastMessage">เพิ่มลงตะกร้าเรียบร้อยแล้ว</span>
-  </div>
-
-  <!-- Application Logic -->
+  <!-- ================= JAVASCRIPT: LOGIC & SNOWFALL EFFECT ================= -->
   <script>
-    // Sample Books Database
-    const books = [
-      {
-        id: 'b1',
-        title: 'เริ่มต้นเขียนโค้ดด้วย Python ฉบับเข้าใจง่ายที่สุด',
-        author: 'ดร. กิตติศักดิ์ พัฒนกิจ',
-        category: 'programming',
-        categoryName: 'การเขียนโปรแกรม',
-        price: 320,
-        rating: 4.9,
-        reviewsCount: 142,
-        isBestseller: true,
-        pages: 288,
-        level: 'สำหรับผู้เริ่มต้น (Zero to Hero)',
-        coverColor: 'from-blue-600 to-indigo-800',
-        badge: 'ยอดนิยม #1',
-        desc: 'คู่มือเขียนโปรแกรม Python สำหรับผู้ที่ไม่เคยมีพื้นฐานมาก่อน สอนตั้งแต่หลักการคิดเชิงตรรกะ ตัวแปร เงื่อนไข ฟังก์ชัน ไปจนถึงสร้างโปรแกรมจำลองขนาดเล็ก พร้อมแบบฝึกหัดท้ายบท',
-        toc: ['พื้นฐานตรรกะและติดตั้ง Python', 'ตัวแปร ชนิดข้อมูล และโอเปอเรเตอร์', 'โครงสร้างควบคุม if-else และการวนลูป', 'ฟังก์ชัน และการจัดการโมดูล', 'การจัดการไฟล์ และ Mini-Project']
-      },
-      {
-        id: 'b2',
-        title: 'Full-Stack Web Development ด้วย React & Node.js',
-        author: 'ธีรเดช วงศ์สว่าง',
-        category: 'programming',
-        categoryName: 'การเขียนโปรแกรม',
-        price: 450,
-        rating: 4.8,
-        reviewsCount: 89,
-        isBestseller: false,
-        pages: 420,
-        level: 'ระดับปานกลาง',
-        coverColor: 'from-cyan-600 to-blue-800',
-        badge: 'อัปเดตใหม่ 2026',
-        desc: 'เจาะลึกการพัฒนาเว็บแอปพลิเคชันยุคใหม่ด้วย React, Tailwind CSS, Express และ MongoDB ครบวงจรตั้งแต่เขียน Frontend สร้าง REST API จนถึงการ Deploy ขึ้น Cloud',
-        toc: ['ทบทวน JavaScript ES6+ สมัยใหม่', 'สร้าง UI ด้วย React และ Tailwind CSS', 'ระบบ State Management และ Hooks', 'พัฒนา Backend API ด้วย Express & Node', 'เชื่อมต่อฐานข้อมูล MongoDB และ Deploy']
-      },
-      {
-        id: 'b3',
-        title: 'AI & Machine Learning พื้นฐานสู่การประยุกต์ใช้งานจริง',
-        author: 'ผศ.ดร. ภาณุพงศ์ ศิริพงษ์',
-        category: 'ai-data',
-        categoryName: 'AI & Data Science',
-        price: 480,
-        rating: 4.9,
-        reviewsCount: 110,
-        isBestseller: true,
-        pages: 380,
-        level: 'ผู้เริ่มต้น - ปานกลาง',
-        coverColor: 'from-purple-600 to-indigo-900',
-        badge: 'แนะนำ',
-        desc: 'อธิบายหลักการทำงานของ AI, Machine Learning และ Deep Learning อย่างเป็นขั้นตอน ไม่ต้องมีพื้นฐานคณิตศาสตร์ขั้นสูงก็เข้าใจได้ พร้อมตัวอย่างโค้ดทำนายผลและจำแนกข้อมูล',
-        toc: ['AI, ML, Deep Learning ต่างกันอย่างไร?', 'การเตรียมและทำความสะอาดข้อมูล (Data Cleaning)', 'โมเดล Supervised & Unsupervised Learning', 'ทำความรู้จัก Neural Network และ LLM', 'Workshop สร้างโมเดลทำนายราคาบ้าน']
-      },
-      {
-        id: 'b4',
-        title: 'SQL & Database Design ฉบับทำงานจริง',
-        author: 'สิรภพ เกษมสุข',
-        category: 'ai-data',
-        categoryName: 'AI & Data Science',
-        price: 290,
-        rating: 4.7,
-        reviewsCount: 65,
-        isBestseller: false,
-        pages: 250,
-        level: 'สำหรับผู้เริ่มต้น',
-        coverColor: 'from-emerald-600 to-teal-800',
-        badge: null,
-        desc: 'เรียนรู้การออกแบบตารางฐานข้อมูลเชิงสัมพันธ์ (Relational DB) การเขียนคำสั่ง SELECT, JOIN, GROUP BY ไปจนถึงการ Optimize Query ให้รวดเร็วในระดับ Production',
-        toc: ['หลักการของฐานข้อมูลเชิงสัมพันธ์', 'คำสั่งพื้นฐาน SELECT, WHERE, ORDER BY', 'เทคนิคการ JOIN หลายตารางอย่างมีประสิทธิภาพ', 'Normalisation & ออกแบบ Schema', 'การทำ Indexing เพื่อเพิ่มความเร็ว']
-      },
-      {
-        id: 'b5',
-        title: 'Cybersecurity 101: พื้นฐานความมั่นคงปลอดภัยไซเบอร์',
-        author: 'วรวิทย์ พิทักษ์ธรรม (CISSP)',
-        category: 'security',
-        categoryName: 'ความปลอดภัยไซเบอร์',
-        price: 390,
-        rating: 4.8,
-        reviewsCount: 78,
-        isBestseller: false,
-        pages: 310,
-        level: 'ผู้เริ่มต้น - ระดับปานกลาง',
-        coverColor: 'from-rose-600 to-red-900',
-        badge: 'ขายดี',
-        desc: 'เจาะลึกภัยคุกคามทางไซเบอร์ในยุคปัจจุบัน เทคนิคการแฮกที่พบบ่อย (Phishing, Malware, SQL Injection) พร้อมวิธีตั้งค่าป้องกันระบบและเซิร์ฟเวอร์ตามมาตรฐานสากล',
-        toc: ['แนวคิด CIA Triad และความเสี่ยงทางไซเบอร์', 'วิเคราะห์ช่องโหว่ยอดนิยม (OWASP Top 10)', 'การเข้ารหัสข้อมูล (Cryptography & SSL/TLS)', 'ระบบ Firewall, IDS/IPS และการเฝ้าระวัง', 'จริยธรรมและกฎหมาย PDPA']
-      },
-      {
-        id: 'b6',
-        title: 'Docker & Kubernetes สำหรับ Developer และ DevOps',
-        author: 'พงศ์พิสิฐ เมธาคุณ',
-        category: 'devops',
-        categoryName: 'Cloud & DevOps',
-        price: 490,
-        rating: 4.9,
-        reviewsCount: 95,
-        isBestseller: true,
-        pages: 360,
-        level: 'ระดับปานกลาง - ระดับสูง',
-        coverColor: 'from-sky-600 to-blue-900',
-        badge: 'แนะนำอย่างยิ่ง',
-        desc: 'เปลี่ยนวิธีจัดการแอปพลิเคชันของคุณด้วย Containerization เรียนรู้ตั้งแต่เขียน Dockerfile, Docker Compose จนถึงจัดการ Cluster ขนาดใหญ่ด้วย Kubernetes อย่างมั่นใจ',
-        toc: ['ทำไมต้อง Container? เปรียบเทียบกับ VM', 'คำสั่งพื้นฐานและการเขียน Dockerfile', 'จัดการ Multi-container ด้วย Docker Compose', 'สถาปัตยกรรม Kubernetes (Pods, Services, Ingress)', 'การทำ CI/CD Pipeline ขั้นพื้นฐาน']
-      },
-      {
-        id: 'b7',
-        title: 'คอมพิวเตอร์ทำงานอย่างไร: Hardware & Architecture',
-        author: 'ดร. วิเชียร เลิศปัญญา',
-        category: 'basics',
-        categoryName: 'พื้นฐานคอมพิวเตอร์',
-        price: 280,
-        rating: 4.6,
-        reviewsCount: 52,
-        isBestseller: false,
-        pages: 240,
-        level: 'สำหรับผู้เริ่มต้น',
-        coverColor: 'from-amber-600 to-orange-800',
-        badge: null,
-        desc: 'เจาะลึกการทำงานภายในเคสคอมพิวเตอร์ ตั้งแต่ CPU, RAM, เมนบอร์ด, ระบบ Bus สัญญาณนาฬิกา ไปจนถึงระบบปฏิบัติการ (OS) จัดสรรทรัพยากรอย่างไร เหมาะกับนักเรียน-นักศึกษา',
-        toc: ['ระบบเลขฐานสองและลอจิกเกต', 'สถาปัตยกรรม CPU และหน่วยความจำ', 'การทำงานของระบบ Input / Output', 'Operating System: Process & Memory Management', 'แนวโน้มเทคโนโลยีฮาร์ดแวร์ยุคใหม่']
-      },
-      {
-        id: 'b8',
-        title: 'Network Fundamentals: เข้าใจระบบเครือข่ายอย่างแท้จริง',
-        author: 'นภนต์ ชัยชนะ (CCNA)',
-        category: 'basics',
-        categoryName: 'พื้นฐานคอมพิวเตอร์',
-        price: 360,
-        rating: 4.7,
-        reviewsCount: 44,
-        isBestseller: false,
-        pages: 290,
-        level: 'สำหรับผู้เริ่มต้น',
-        coverColor: 'from-emerald-700 to-teal-900',
-        badge: null,
-        desc: 'ไม่ต้องจำแบบนกแก้วนกขุนทอง อธิบายระบบเครือข่ายด้วยภาพและสถานการณ์จริง OSI 7 Layer, TCP/IP, IP Address & Subnetting, DNS, DHCP และการแก้ปัญหาเน็ตเวิร์กเบื้องต้น',
-        toc: ['ทำความเข้าใจแบบจำลอง OSI 7 Layers', 'IP Address และเทคนิค Subnetting ฉบับง่าย', 'โปรโตคอล TCP vs UDP', 'ระบบ DNS, DHCP และ NAT ทำงานอย่างไร', 'คำสั่ง CLI ตรวจสอบเน็ตเวิร์ก (ping, traceroute)']
+    // 1. Mobile Menu Drawer Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      const isExpanded = !mobileMenu.classList.contains('hidden');
+      if (isExpanded) {
+        mobileMenu.classList.add('hidden');
+        menuIcon.classList.remove('fa-xmark');
+        menuIcon.classList.add('fa-bars');
+      } else {
+        mobileMenu.classList.remove('hidden');
+        menuIcon.classList.remove('fa-bars');
+        menuIcon.classList.add('fa-xmark');
       }
-    ];
-
-    // Category options
-    const categories = [
-      { id: 'all', label: 'ทั้งหมด' },
-      { id: 'programming', label: 'การเขียนโค้ด' },
-      { id: 'ai-data', label: 'AI & Data' },
-      { id: 'security', label: 'ความปลอดภัย' },
-      { id: 'devops', label: 'Cloud & DevOps' },
-      { id: 'basics', label: 'พื้นฐานคอมฯ' }
-    ];
-
-    // State
-    let currentCategory = 'all';
-    let searchQuery = '';
-    let currentSort = 'popular';
-    let cart = [];
-    let wishlist = [];
-    let activeModalBook = null;
-
-    // Initialize UI
-    document.addEventListener('DOMContentLoaded', () => {
-      renderCategoryButtons();
-      renderBooks();
-      lucide.createIcons();
     });
 
-    // Render Category Filter Buttons
-    function renderCategoryButtons() {
-      const container = document.getElementById('categoryButtons');
-      container.innerHTML = categories.map(cat => `
-        <button 
-          onclick="selectCategory('${cat.id}')"
-          class="px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-            currentCategory === cat.id 
-              ? 'bg-slate-900 text-white shadow-sm' 
-              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-          }"
-        >
-          ${cat.label}
-        </button>
-      `).join('');
-    }
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuIcon.classList.remove('fa-xmark');
+        menuIcon.classList.add('fa-bars');
+      });
+    });
 
-    function selectCategory(id) {
-      currentCategory = id;
-      renderCategoryButtons();
-      renderBooks();
-    }
-
-    function handleSearch(val) {
-      searchQuery = val.trim().toLowerCase();
-      
-      // Sync desktop & mobile inputs
-      const dInput = document.getElementById('desktopSearchInput');
-      const mInput = document.getElementById('mobileSearchInput');
-      if (dInput.value !== val) dInput.value = val;
-      if (mInput.value !== val) mInput.value = val;
-
-      const clearBtn = document.getElementById('clearSearchBtn');
-      if (clearBtn) {
-        if (searchQuery.length > 0) {
-          clearBtn.classList.remove('hidden');
-        } else {
-          clearBtn.classList.add('hidden');
-        }
+    // 2. Navbar scroll background effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 30) {
+        navbar.classList.add('shadow-md', 'bg-white/98');
+        navbar.classList.remove('bg-white/95');
+      } else {
+        navbar.classList.remove('shadow-md');
+        navbar.classList.add('bg-white/95');
       }
+    });
 
-      renderBooks();
-    }
+    // 3. Menu Filtering Logic
+    const filterButtons = document.querySelectorAll('.menu-filter');
+    const menuCards = document.querySelectorAll('.menu-card');
 
-    function clearSearch() {
-      handleSearch('');
-    }
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Toggle active button styles
+        filterButtons.forEach(btn => {
+          btn.classList.remove('bg-xmas-red', 'text-white', 'shadow-md');
+          btn.classList.add('bg-white', 'text-xmas-brown');
+        });
+        button.classList.add('bg-xmas-red', 'text-white', 'shadow-md');
+        button.classList.remove('bg-white', 'text-xmas-brown');
 
-    function handleSort(val) {
-      currentSort = val;
-      renderBooks();
-    }
+        const category = button.getAttribute('data-category');
 
-    function resetFilters() {
-      currentCategory = 'all';
-      searchQuery = '';
-      currentSort = 'popular';
-      document.getElementById('desktopSearchInput').value = '';
-      document.getElementById('mobileSearchInput').value = '';
-      document.getElementById('sortSelect').value = 'popular';
-      const clearBtn = document.getElementById('clearSearchBtn');
-      if (clearBtn) clearBtn.classList.add('hidden');
-      renderCategoryButtons();
-      renderBooks();
-    }
+        menuCards.forEach(card => {
+          const cardCategory = card.getAttribute('data-item-category');
+          if (category === 'all' || cardCategory === category) {
+            card.classList.remove('hidden');
+            card.classList.add('flex');
+          } else {
+            card.classList.add('hidden');
+            card.classList.remove('flex');
+          }
+        });
+      });
+    });
 
-    // Filter & Sort
-    function getFilteredBooks() {
-      return books.filter(book => {
-        const matchesCategory = currentCategory === 'all' || book.category === currentCategory;
-        const matchesSearch = searchQuery === '' || 
-          book.title.toLowerCase().includes(searchQuery) ||
-          book.author.toLowerCase().includes(searchQuery) ||
-          book.desc.toLowerCase().includes(searchQuery) ||
-          book.categoryName.toLowerCase().includes(searchQuery);
-        return matchesCategory && matchesSearch;
-      }).sort((a, b) => {
-        if (currentSort === 'popular') return (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0) || b.rating - a.rating;
-        if (currentSort === 'price-asc') return a.price - b.price;
-        if (currentSort === 'price-desc') return b.price - a.price;
-        if (currentSort === 'newest') return b.pages - a.pages;
-        return 0;
+    // 4. Lightweight Falling Snow Animation Effect
+    const canvas = document.getElementById('snow-canvas');
+    const ctx = canvas.getContext('2d');
+    let snowActive = true;
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const flakes = [];
+    const flakeCount = window.innerWidth < 768 ? 35 : 65; // Optimized for mobile & desktop
+
+    for (let i = 0; i < flakeCount; i++) {
+      flakes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 3 + 1,
+        d: Math.random() * flakeCount,
+        vx: Math.random() * 1 - 0.5,
+        vy: Math.random() * 1.5 + 0.8,
+        opacity: Math.random() * 0.7 + 0.3
       });
     }
 
-    // Render Books Grid
-    function renderBooks() {
-      const filtered = getFilteredBooks();
-      const grid = document.getElementById('bookGrid');
-      const emptyState = document.getElementById('emptyState');
-      const countText = document.getElementById('resultCountText');
-      const resetBtn = document.getElementById('resetFilterBtn');
+    function renderSnow() {
+      ctx.clearRect(0, 0, width, height);
+      if (!snowActive) return;
 
-      countText.innerText = `แสดง ${filtered.length} เล่มจากทั้งหมด ${books.length} เล่ม`;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      for (let i = 0; i < flakeCount; i++) {
+        const f = flakes[i];
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, false);
+        ctx.fillStyle = `rgba(255, 255, 255, ${f.opacity})`;
+        ctx.fill();
 
-      if (currentCategory !== 'all' || searchQuery !== '') {
-        resetBtn.classList.remove('hidden');
-      } else {
-        resetBtn.classList.add('hidden');
+        f.y += f.vy;
+        f.x += f.vx;
+
+        if (f.y > height) {
+          f.y = -10;
+          f.x = Math.random() * width;
+        }
+        if (f.x > width + 10) f.x = -10;
+        if (f.x < -10) f.x = width + 10;
       }
-
-      if (filtered.length === 0) {
-        grid.innerHTML = '';
-        emptyState.classList.remove('hidden');
-        return;
-      }
-
-      emptyState.classList.add('hidden');
-      grid.innerHTML = filtered.map(book => {
-        const isFav = wishlist.includes(book.id);
-        return `
-          <div class="bg-white rounded-xl border border-slate-200/90 overflow-hidden hover:shadow-md hover:border-slate-300 transition duration-200 flex flex-col group">
-            
-            <!-- Book Cover Area -->
-            <div 
-              onclick="openBookModal('${book.id}')"
-              class="relative cursor-pointer bg-gradient-to-br ${book.coverColor} p-4 h-48 flex flex-col justify-between text-white select-none overflow-hidden"
-            >
-              <!-- Subtle decorative pattern -->
-              <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
-
-              <div class="flex items-start justify-between relative z-10">
-                <span class="text-[10px] font-semibold tracking-wide bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded text-white/90">
-                  ${book.categoryName}
-                </span>
-                ${book.badge ? `
-                  <span class="text-[10px] font-medium bg-amber-400 text-slate-900 px-2 py-0.5 rounded shadow-sm font-semibold">
-                    ${book.badge}
-                  </span>
-                ` : ''}
-              </div>
-
-              <div class="relative z-10 my-auto text-center px-1">
-                <i data-lucide="book" class="w-6 h-6 mx-auto mb-1.5 opacity-70 group-hover:scale-110 transition-transform"></i>
-                <div class="font-bold text-xs sm:text-sm line-clamp-2 leading-snug drop-shadow-sm">
-                  ${book.title}
-                </div>
-              </div>
-
-              <div class="text-[10px] text-white/70 text-right relative z-10">
-                ${book.author}
-              </div>
-            </div>
-
-            <!-- Book Card Content -->
-            <div class="p-4 flex-1 flex flex-col justify-between">
-              <div>
-                <div class="flex items-center gap-1 text-amber-500 text-xs mb-1">
-                  <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-                  <span class="font-semibold text-slate-700">${book.rating}</span>
-                  <span class="text-slate-400 text-[11px]">(${book.reviewsCount})</span>
-                </div>
-
-                <h3 
-                  onclick="openBookModal('${book.id}')" 
-                  class="text-xs sm:text-sm font-semibold text-slate-900 hover:text-blue-600 cursor-pointer line-clamp-2 leading-tight"
-                  title="${book.title}"
-                >
-                  ${book.title}
-                </h3>
-
-                <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">
-                  ${book.desc}
-                </p>
-              </div>
-
-              <!-- Price & Quick Action -->
-              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <div>
-                  <span class="text-xs text-slate-400 block -mb-1">ราคา</span>
-                  <span class="text-base font-bold text-slate-900">฿${book.price}</span>
-                </div>
-
-                <div class="flex items-center gap-1">
-                  <button 
-                    onclick="toggleWishlist('${book.id}')" 
-                    class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-slate-50 transition"
-                    title="${isFav ? 'นำออกจากที่ถูกใจ' : 'บันทึกเล่มนี้'}"
-                  >
-                    <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-500 text-rose-500' : ''}"></i>
-                  </button>
-                  <button 
-                    onclick="addToCart('${book.id}')"
-                    class="bg-slate-900 hover:bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-medium transition flex items-center gap-1 shadow-sm"
-                  >
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                    <span class="hidden sm:inline">ใส่ตะกร้า</span>
-                  </button>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        `;
-      }).join('');
-
-      lucide.createIcons();
+      requestAnimationFrame(renderSnow);
     }
+    renderSnow();
 
-    // Modal Handling
-    function openBookModal(bookId) {
-      const book = books.find(b => b.id === bookId);
-      if (!book) return;
-
-      activeModalBook = book;
-      document.getElementById('modalCategory').innerText = book.categoryName;
-      document.getElementById('modalTitle').innerText = book.title;
-      document.getElementById('modalAuthor').innerText = `ผู้แต่ง: ${book.author}`;
-      document.getElementById('modalPrice').innerText = `฿${book.price}`;
-      document.getElementById('modalDesc').innerText = book.desc;
-      document.getElementById('modalPages').innerText = `${book.pages} หน้า`;
-      document.getElementById('modalLevel').innerText = book.level;
-
-      // Cover render
-      const cover = document.getElementById('modalCover');
-      cover.className = `w-24 h-32 rounded-lg flex items-center justify-center text-white font-bold p-2 text-center text-xs shrink-0 shadow-sm bg-gradient-to-br ${book.coverColor}`;
-      cover.innerText = book.title;
-
-      // TOC
-      const tocList = document.getElementById('modalTOC');
-      tocList.innerHTML = book.toc.map(item => `<li>${item}</li>`).join('');
-
-      // Wishlist button state
-      updateModalWishlistBtn();
-
-      document.getElementById('bookModal').classList.remove('hidden');
-    }
-
-    function closeBookModal() {
-      document.getElementById('bookModal').classList.add('hidden');
-      activeModalBook = null;
-    }
-
-    function updateModalWishlistBtn() {
-      if (!activeModalBook) return;
-      const isFav = wishlist.includes(activeModalBook.id);
-      const btn = document.getElementById('modalWishlistBtn');
-      btn.innerHTML = `
-        <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-500 text-rose-500' : ''}"></i>
-        <span>${isFav ? 'บันทึกแล้ว' : 'บันทึกถูกใจ'}</span>
-      `;
-      lucide.createIcons();
-    }
-
-    function toggleWishlistFromModal() {
-      if (activeModalBook) {
-        toggleWishlist(activeModalBook.id);
-        updateModalWishlistBtn();
-      }
-    }
-
-    function addToCartFromModal() {
-      if (activeModalBook) {
-        addToCart(activeModalBook.id);
-        closeBookModal();
-      }
-    }
-
-    // Cart Management
-    function addToCart(bookId) {
-      const book = books.find(b => b.id === bookId);
-      if (!book) return;
-
-      const existing = cart.find(item => item.id === bookId);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ ...book, qty: 1 });
-      }
-
-      updateCartBadge();
-      showToast(`เพิ่ม "${book.title.substring(0, 25)}..." ลงตะกร้าแล้ว`);
-    }
-
-    function updateCartBadge() {
-      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-      const badge = document.getElementById('cartCountBadge');
-      const headerCount = document.getElementById('cartCountHeader');
-
-      if (totalQty > 0) {
-        badge.innerText = totalQty;
-        badge.classList.remove('hidden');
-      } else {
-        badge.classList.add('hidden');
-      }
-
-      headerCount.innerText = `(${totalQty} รายการ)`;
-      renderCartItems();
-    }
-
-    function renderCartItems() {
-      const container = document.getElementById('cartItemsList');
-      const totalPriceEl = document.getElementById('cartTotalPrice');
-
-      if (cart.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-12 text-slate-400">
-            <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
-            <p class="text-xs">ยังไม่มีหนังสือในตะกร้า</p>
-          </div>
-        `;
-        totalPriceEl.innerText = '฿0';
-        lucide.createIcons();
-        return;
-      }
-
-      let total = 0;
-      container.innerHTML = cart.map(item => {
-        const itemTotal = item.price * item.qty;
-        total += itemTotal;
-        return `
-          <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-50 border border-slate-100">
-            <div class="w-10 h-14 rounded bg-gradient-to-br ${item.coverColor} flex items-center justify-center text-[8px] text-white font-bold p-1 text-center shrink-0">
-              ${item.title.substring(0, 10)}..
-            </div>
-            <div class="flex-1 min-w-0">
-              <h4 class="text-xs font-semibold text-slate-800 truncate">${item.title}</h4>
-              <p class="text-[11px] text-blue-600 font-medium">฿${item.price}</p>
-              
-              <div class="flex items-center gap-2 mt-1">
-                <button onclick="changeQty('${item.id}', -1)" class="w-5 h-5 bg-white border border-slate-200 rounded text-slate-600 text-xs flex items-center justify-center hover:bg-slate-100">-</button>
-                <span class="text-xs text-slate-700 font-medium">${item.qty}</span>
-                <button onclick="changeQty('${item.id}', 1)" class="w-5 h-5 bg-white border border-slate-200 rounded text-slate-600 text-xs flex items-center justify-center hover:bg-slate-100">+</button>
-              </div>
-            </div>
-            <button onclick="removeFromCart('${item.id}')" class="text-slate-400 hover:text-rose-500 p-1">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-        `;
-      }).join('');
-
-      totalPriceEl.innerText = `฿${total.toLocaleString()}`;
-      lucide.createIcons();
-    }
-
-    function changeQty(bookId, delta) {
-      const item = cart.find(i => i.id === bookId);
-      if (!item) return;
-
-      item.qty += delta;
-      if (item.qty <= 0) {
-        cart = cart.filter(i => i.id !== bookId);
-      }
-      updateCartBadge();
-    }
-
-    function removeFromCart(bookId) {
-      cart = cart.filter(i => i.id !== bookId);
-      updateCartBadge();
-    }
-
-    function toggleCartDrawer() {
-      const drawer = document.getElementById('cartDrawer');
-      drawer.classList.toggle('hidden');
-    }
-
-    function checkout() {
-      if (cart.length === 0) {
-        alert('กรุณาเลือกหนังสือลงตะกร้าก่อนดำเนินการชำระเงิน');
-        return;
-      }
-      alert('ระบบสั่งซื้อจำลอง: ขอบคุณที่สนใจสั่งซื้อหนังสือจาก ByteBooks!');
-      cart = [];
-      updateCartBadge();
-      toggleCartDrawer();
-    }
-
-    // Wishlist
-    function toggleWishlist(bookId) {
-      if (wishlist.includes(bookId)) {
-        wishlist = wishlist.filter(id => id !== bookId);
-        showToast('นำออกจากรายการที่ถูกใจแล้ว');
-      } else {
-        wishlist.push(bookId);
-        showToast('เพิ่มในรายการที่ถูกใจแล้ว');
-      }
-      updateWishlistBadge();
-      renderBooks();
-    }
-
-    function updateWishlistBadge() {
-      const countEl = document.getElementById('wishlistCount');
-      if (wishlist.length > 0) {
-        countEl.innerText = wishlist.length;
-        countEl.classList.remove('hidden');
-      } else {
-        countEl.classList.add('hidden');
-      }
-    }
-
-    function toggleWishlistModal() {
-      if (wishlist.length === 0) {
-        showToast('ยังไม่มีรายการหนังสือที่ถูกใจ');
-        return;
-      }
-      // Filter category to show wishlist
-      const favTitles = books.filter(b => wishlist.includes(b.id)).map(b => b.title).join('\n• ');
-      alert(`หนังสือที่คุณบันทึกไว้ (${wishlist.length} เล่ม):\n• ${favTitles}`);
-    }
-
-    // Toast Notification
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      const text = document.getElementById('toastMessage');
-      text.innerText = msg;
-      toast.classList.remove('hidden');
-      setTimeout(() => {
-        toast.classList.add('hidden');
-      }, 2500);
-    }
-
-    // Close modal on click outside
-    window.onclick = function(event) {
-      const modal = document.getElementById('bookModal');
-      const cartDrawer = document.getElementById('cartDrawer');
-      if (event.target === modal) {
-        closeBookModal();
-      }
-      if (event.target === cartDrawer) {
-        toggleCartDrawer();
-      }
+    // Snow Toggle Button Handler
+    const toggleSnowBtn = document.getElementById('toggle-snow-btn');
+    const snowStatus = document.getElementById('snow-status');
+    if (toggleSnowBtn) {
+      toggleSnowBtn.addEventListener('click', () => {
+        snowActive = !snowActive;
+        if (snowActive) {
+          snowStatus.textContent = 'เปิด';
+          canvas.style.display = 'block';
+          renderSnow();
+        } else {
+          snowStatus.textContent = 'ปิด';
+          ctx.clearRect(0, 0, width, height);
+          canvas.style.display = 'none';
+        }
+      });
     }
   </script>
 </body>
