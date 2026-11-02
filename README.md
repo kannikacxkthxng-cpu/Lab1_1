@@ -1,69 +1,114 @@
-﻿# 🎄 ซดนม (Zod Nom) - Landing Page
+# 📚 ByteBooks — เว็บแอปร้านหนังสือคอมพิวเตอร์และเทคโนโลยี (Clean & Minimalist Tech Bookstore)
 
-> เว็บไซต์ Landing Page สไตล์คาเฟ่และร้านอาหาร สำหรับร้านนมสดและขนมปังปิ้งเตาถ่านชื่อดังในจังหวัดบุรีรัมย์ **"ซดนม"** ภายใต้ธีมเทศกาลคริสต์มาสและส่งท้ายปีเก่าต้อนรับปีใหม่ (Christmas & Cozy Winter Theme)
-
----
-
-## ✨ จุดเด่นของเว็บไซต์ (Key Features)
-
-1. **ดีไซน์ธีมคริสต์มาสแสนอบอุ่น (Christmas & Cozy Winter Aesthetic):**
-   - โทนสีเทศกาล: แดงซานต้า (Crimson Red), เขียวใบสน (Pine Green), ทองแชมเปญ (Gold) และครีมฟองนม (Eggnog Cream)
-   - แอนิเมชันเกล็ดหิมะตกทั่วหน้าจอ (Falling Snow Animation Canvas) พร้อมปุ่มเปิด/ปิดหิมะตามความชอบ
-   - ป้ายแท็กเมนูและริบบิ้นเทศกาลประดับตกแต่งตลอดหน้าเว็บ
-
-2. **โครงสร้างหน้าเว็บครบครัน (Page Architecture):**
-   - **Navbar:** โลโก้จริงของร้านประดับหมวกซานต้า, เมนูนำทางแบบ Smooth Anchor Link, ปุ่มโทรสั่ง, และปุ่มเพจ Facebook
-   - **Hero Section:** ภาพบรรยากาศร้านขนาดใหญ่พร้อม Gradient Overlay, พาดหัวหลัก-รอง, ปุ่ม Call to Action (CTA) และป้ายสัญลักษณ์จุดเด่น
-   - **Vibe & Atmosphere:** แกลเลอรีภาพบรรยากาศร้าน 5 มุม จัดวางแบบ Responsive Masonry Grid
-   - **Signature Menu:** การ์ดเมนูแนะนำ 7 รายการ พร้อมชื่อ ราคา รูปภาพจริง เอฟเฟกต์ Scale on hover และปุ่มกรองหมวดหมู่ (Filter Tabs)
-   - **Promotion Banner:** แบนเนอร์กิจกรรมพิเศษช่วงเทศกาลคริสต์มาสและปีใหม่ เช็คอินรับส่วนลด
-   - **Location & Contact:** ข้อมูลที่อยู่ เวลาเปิด-ปิด เบอร์โทรศัพท์ ลิงก์เดลิเวอรี และ Google Maps Embed แบบ Interactive
-   - **Footer:** ลิขสิทธิ์ร้าน เมนูลัด และเวลาเปิดทำการช่วงเทศกาล
-
-3. **เชื่อมโยงเพจ Facebook ซดนม:**
-   - มีปุ่มลิงก์ตรงไปยังเพจ Facebook ของร้านทั้งบน Navbar, Hero Section, การ์ดติดต่อ, แบนเนอร์กิจกรรม, ปุ่มลอย (Floating Action Button) และ Footer
-
-4. **รองรับการแสดงผลบนอุปกรณ์ทุกขนาด (Mobile-Responsive 100%):**
-   - ออกแบบด้วยแนวคิด Mobile-First
-   - มีเมนู Hamburger Drawer สำหรับเปิดบนสมาร์ทโฟน
-   - ปุ่มโทรด่วนและปุ่ม Facebook แบบ Floating ชิดขวาล่าง
+> เว็บแอปพลิเคชันร้านหนังสือคอมพิวเตอร์และคู่มือโปรแกรมเมอร์ ออกแบบตามแนวคิด **Minimalist & Clean UX/UI** ใช้งานง่าย สบายตา ค้นหาหนังสือได้รวดเร็ว พร้อมระบบสารบัญย่อ ตะกร้าสินค้า และคู่มือแนะนำสำหรับผู้เริ่มต้น
 
 ---
 
-## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
-
-- **HTML5:** Semantic Elements สะอาดและเป็นระเบียบ
-- **CSS Framework:** [Tailwind CSS](https://tailwindcss.com/) (ผ่าน CDN)
-- **Typography:** Google Fonts ([Prompt](https://fonts.google.com/specimen/Prompt) & [Kanit](https://fonts.google.com/specimen/Kanit))
-- **Iconography:** [Font Awesome 6](https://fontawesome.com/)
-- **JavaScript (Vanilla JS):** จัดการระบบเมนูมือถือ, ระบบกรองหมวดหมู่เมนู (Filter Tabs) และ Canvas Snowfall Animation
+## 🌐 ลิงก์เข้าชมเว็บไซต์ออนไลน์ (Live Demo)
+สามารถเข้าใช้งานเว็บแอปจริงผ่าน GitHub Pages:  
+🔗 **[https://kannikacxkthxng-cpu.github.io/Lab1_1/](https://kannikacxkthxng-cpu.github.io/Lab1_1/)**
 
 ---
 
-## 📂 โครงสร้างไฟล์ในโปรเจกต์ (Project Structure)
+## 🎯 วัตถุประสงค์และการออกแบบ (Design Concept)
+
+1. **ความเรียบง่าย สบายตา (Clean & Minimalist Aesthetic):**
+   - ใช้โทนสีขาวและเทาสว่าง (`#F8FAFC` Slate-50) เป็นพื้นหลัง เพื่อลดความเมื่อยล้าของสายตาเวลาอ่านชื่อหนังสือและโค้ด
+   - ใช้สีน้ำเงินเทคโนโลยี (`#2563EB` Royal Blue) เป็นสีหลัก สื่อถึงความทันสมัย ความน่าเชื่อถือ และศาสตร์ด้านคอมพิวเตอร์
+   - ตัวอักษรใช้ฟอนต์ **Prompt** ผสม **Inter** จาก Google Fonts ซึ่งอ่านง่าย สบายตา และรองรับภาษาไทยอย่างสมบูรณ์
+
+2. **เน้นความง่ายในการใช้งาน (Intuitive UX):**
+   - ไม่ซับซ้อน ไม่รกสายตา ผู้ใช้สามารถพิมพ์ค้นหาหนังสือ หรือกดเปลี่ยนหมวดหมู่ได้ทันทีในคลิกเดียว
+   - มีข้อมูลประกอบการตัดสินใจครบถ้วน เช่น ระดับความรู้ที่เหมาะสม (Zero to Hero / Intermediate), จำนวนหน้า, สารบัญย่อในเล่ม
+
+---
+
+## ✨ ฟังก์ชันเด่นของเว็บแอป (Key Features)
+
+### 1. ระบบค้นหาแบบเรียลไทม์ (Instant Live Search)
+- ช่องค้นหาอัจฉริยะ พิมพ์ค้นหาตาม **ชื่อหนังสือ**, **ชื่อผู้แต่ง**, หรือ **คีย์เวิร์ดภาษาเขียนโค้ด** (เช่น Python, React, Docker, AI, Network) กรองผลลัพธ์ทันทีโดยไม่ต้องโหลดหน้าเว็บใหม่
+- มีปุ่มล้างคำค้นหา (Clear) เพื่อกลับสู่หน้าหนังสือทั้งหมดอย่างรวดเร็ว
+
+### 2. แถบกรองหมวดหมู่และจัดเรียง (Category Filter & Sorting)
+- กรองหมวดหมู่หนังสือคอมพิวเตอร์ได้ใน 1 คลิก:
+  - 🌐 **ทั้งหมด (All Books)**
+  - 💻 **การเขียนโค้ด (Programming):** Python, Full-Stack React & Node.js
+  - 🤖 **AI & Data Science:** Machine Learning, SQL & Database Design
+  - 🔒 **ความปลอดภัยไซเบอร์ (Cybersecurity):** Cybersecurity 101
+  - ☁️ **Cloud & DevOps:** Docker & Kubernetes
+  - 🖥️ **พื้นฐานคอมพิวเตอร์ (Computer Basics):** Computer Architecture, Network Fundamentals
+- เมนูจัดเรียง (Sort By): เรียงตามยอดนิยม, มาใหม่ล่าสุด, ราคาต่ำ-สูง, และราคาสูง-ต่ำ
+
+### 3. ป๊อปอัปดูรายละเอียดและสารบัญย่อ (Book Detail Modal)
+- คลิกที่ตัวหนังสือเพื่อเปิดหน้าต่างดูรายละเอียดเชิงลึก:
+  - หน้าปกจำลองพร้อมโทนสีกราเดียนต์ตามหมวดหมู่
+  - สรุปเนื้อหาโดยย่อ
+  - **สารบัญย่อ 5 หัวข้อเด่นในเล่ม** ช่วยให้ตัดสินใจซื้อง่ายขึ้น
+  - ข้อมูลจำนวนหน้า และระดับความเหมาะสมของผู้เรียน
+
+### 4. ระบบตะกร้าสินค้าแบบสไลด์ข้าง (Slide-over Cart Drawer)
+- กด "เพิ่มลงตะกร้า" พร้อม Toast Notification แจ้งเตือนสวยงาม
+- ตะกร้าสินค้าด้านข้างแสดงรายการที่เลือก จำนวนเล่ม ราคารวม และคำนวณค่าจัดส่งฟรีอัตโนมัติ
+- รองรับการลบรายการออกจากตะกร้า
+
+### 5. ระบบบันทึกรายการที่ถูกใจ (Wishlist)
+- กดหัวใจเพื่อบันทึกหนังสือเล่มที่สนใจ มี Badge แสดงจำนวนหนังสือที่ถูกใจแบบ Real-time
+
+### 6. คู่มือสำหรับมือใหม่ (Beginners Learning Path Guide)
+- ส่วนแนะนำเส้นทางการเรียนรู้สำหรับผู้เริ่มต้นศึกษาสายคอมพิวเตอร์:
+  - สายเขียนโปรแกรม (Programming)
+  - สายข้อมูล & AI (Data & AI)
+  - สายระบบ & เน็ตเวิร์ก (DevOps & Security)
+
+### 7. รองรับ Responsive 100%
+- ปรับขนาดเลย์เอาต์อัตโนมัติบนมือถือ แท็บเล็ต และคอมพิวเตอร์เดสก์ท็อป
+
+---
+
+## 🛠️ เทคโนโลยีที่ใช้พัฒนา (Tech Stack)
+
+| ส่วนประกอบ | เทคโนโลยีที่ใช้ | รายละเอียด |
+| :--- | :--- | :--- |
+| **โครงสร้างเว็บ** | HTML5 | Semantic elements เป็นระเบียบและถูกต้องตามมาตรฐาน |
+| **การจัดรูปแบบ & สไตล์** | Tailwind CSS (v3 CDN) | Utility-first CSS ดีไซน์สะอาด Responsive ยืดหยุ่น |
+| **แบบอักษร** | Google Fonts | ฟอนต์ `Prompt` และ `Inter` |
+| **ไอคอน** | Lucide Icons | Minimalist SVG Icons ทันสมัยและคมชัด |
+| **การทำงาน & ตรรกะ** | Vanilla JavaScript | ควบคุม Search, Filter, Modal, Cart, Wishlist โดยไม่ต้องพึ่งไลบรารีขนาดใหญ่ |
+
+---
+
+## 📂 โครงสร้างโปรเจกต์ (Project Structure)
 
 ```text
-├── index.html            # ไฟล์หลักของ Landing Page
-├── README.md             # เอกสารอธิบายโปรเจกต์
-└── images/               # โฟลเดอร์รูปภาพจริงที่ใช้ในเว็บไซต์
-    ├── logo.png          # โลโก้ร้าน ซดนม
-    ├── hero-bg.jpg       # ภาพบรรยากาศหลักใน Hero Section
-    ├── vibe-1.jpg..4.jpg # ภาพบรรยากาศภายในร้าน
-    ├── menu-1.jpg..7.jpg # ภาพเมนูแนะนำจริงทั้ง 7 เมนู
-    ├── บรรยากาศในร้าน/   # โฟลเดอร์รูปบรรยากาศต้นฉบับ
-    └── เมนูร้าน/         # โฟลเดอร์รูปเมนูต้นฉบับ
+├── index.html                   # ไฟล์หลักเว็บแอปร้านหนังสือ ByteBooks (Root App)
+├── README.md                    # เอกสารคู่มืออธิบายเว็บแอปร้านหนังสือ
+├── ร้านหนังสือ/                  # โฟลเดอร์ต้นฉบับเว็บแอปร้านหนังสือ
+│   ├── index.html               # ไฟล์หน้าเว็บ ByteBooks
+│   └── README.md                # เอกสารคู่มือร้านหนังสือ
+├── ระบบของหาย/                  # โปรเจกต์ระบบแจ้งของหาย (PawFind)
+├── Lab2/                        # โฟลเดอร์โปรเจกต์เสริม
+└── images/                      # โฟลเดอร์รูปภาพและทรัพยากร
 ```
 
 ---
 
-## 🚀 วิธีการเปิดใช้งาน (Getting Started)
+## 🚀 วิธีการเปิดใช้งานบนเครื่อง (Local Setup)
 
-1. Clone หรือ Download Repository นี้ลงเครื่อง
+1. **Clone Repository:**
    ```bash
-   git clone https://github.com/kannikacxkthxng-cpu/Lab2.git
+   git clone https://github.com/kannikacxkthxng-cpu/Lab1_1.git
+   cd Lab1_1
    ```
-2. ดับเบิลคลิกเปิดไฟล์ `index.html` ผ่านเว็บเบราว์เซอร์ใดก็ได้ (Google Chrome, Microsoft Edge, Safari) ใช้งานได้ทันทีโดยไม่ต้องติดตั้งโปรแกรมเสริม
+2. **เปิดใช้งาน:**
+   - ดับเบิลคลิกไฟล์ `index.html` เพื่อเปิดใช้งานบนเบราว์เซอร์ (Chrome, Edge, Firefox, Safari) ได้ทันที
+   - ไม่จำเป็นต้องติดตั้ง Node.js หรือรัน Web Server เพิ่มเติม
 
 ---
 
-© 2026 ซดนม (Zod Nom). All rights reserved. 🎄
+## 👤 ผู้พัฒนา
+- **GitHub:** [@kannikacxkthxng-cpu](https://github.com/kannikacxkthxng-cpu)
+- **Repository:** [Lab1_1](https://github.com/kannikacxkthxng-cpu/Lab1_1)
+
+---
+
+© 2026 **ByteBooks**. All rights reserved. Designed with Clean & Minimalist UX/UI for Tech Learners.
