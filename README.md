@@ -1,69 +1,71 @@
-# 🎄 เปรม นมสด (Prem Nomsod) - Landing Page
+# 📚 ByteBooks — ร้านหนังสือคอมพิวเตอร์และเทคโนโลยี (Clean & Minimalist Tech Bookstore)
 
-> เว็บไซต์ Landing Page สไตล์คาเฟ่และร้านอาหาร สำหรับร้านนมสดและขนมปังปิ้งเตาถ่านชื่อดังในจังหวัดบุรีรัมย์ **"เปรม นมสด"** ภายใต้ธีมเทศกาลคริสต์มาสและส่งท้ายปีเก่าต้อนรับปีใหม่ (Christmas & Cozy Winter Theme)
+> เว็บไซต์ร้านหนังสือคอมพิวเตอร์และเทคโนโลยี ออกแบบด้วยแนวคิด **Minimalist & Clean UX/UI** เรียบง่าย สบายตา ใช้งานง่าย ค้นหาหนังสือได้รวดเร็ว พร้อมข้อมูลสารบัญและเนื้อหาย่อครบถ้วน
 
 ---
 
-## ✨ จุดเด่นของเว็บไซต์ (Key Features)
+## 🌐 ตัวอย่างเว็บไซต์ออนไลน์ (Live Demo)
+สามารถเข้าชมเว็บไซต์จริงผ่าน GitHub Pages:  
+🔗 **[https://kannikacxkthxng-cpu.github.io/Lab1_1/](https://kannikacxkthxng-cpu.github.io/Lab1_1/)**
 
-1. **ดีไซน์ธีมคริสต์มาสแสนอบอุ่น (Christmas & Cozy Winter Aesthetic):**
-   - โทนสีเทศกาล: แดงซานต้า (Crimson Red), เขียวใบสน (Pine Green), ทองแชมเปญ (Gold) และครีมฟองนม (Eggnog Cream)
-   - แอนิเมชันเกล็ดหิมะตกทั่วหน้าจอ (Falling Snow Animation Canvas) พร้อมปุ่มเปิด/ปิดหิมะตามความชอบ
-   - ป้ายแท็กเมนูและริบบิ้นเทศกาลประดับตกแต่งตลอดหน้าเว็บ
+---
 
-2. **โครงสร้างหน้าเว็บครบครัน (Page Architecture):**
-   - **Navbar:** โลโก้จริงของร้านประดับหมวกซานต้า, เมนูนำทางแบบ Smooth Anchor Link, ปุ่มโทรสั่ง, และปุ่มเพจ Facebook
-   - **Hero Section:** ภาพบรรยากาศร้านขนาดใหญ่พร้อม Gradient Overlay, พาดหัวหลัก-รอง, ปุ่ม Call to Action (CTA) และป้ายสัญลักษณ์จุดเด่น
-   - **Vibe & Atmosphere:** แกลเลอรีภาพบรรยากาศร้าน 5 มุม จัดวางแบบ Responsive Masonry Grid
-   - **Signature Menu:** การ์ดเมนูแนะนำ 7 รายการ พร้อมชื่อ ราคา รูปภาพจริง เอฟเฟกต์ Scale on hover และปุ่มกรองหมวดหมู่ (Filter Tabs)
-   - **Promotion Banner:** แบนเนอร์กิจกรรมพิเศษช่วงเทศกาลคริสต์มาสและปีใหม่ เช็คอินรับส่วนลด
-   - **Location & Contact:** ข้อมูลที่อยู่ เวลาเปิด-ปิด เบอร์โทรศัพท์ ลิงก์เดลิเวอรี และ Google Maps Embed แบบ Interactive
-   - **Footer:** ลิขสิทธิ์ร้าน เมนูลัด และเวลาเปิดทำการช่วงเทศกาล
+## ✨ จุดเด่นและการออกแบบ (Key Highlights & Features)
 
-3. **เชื่อมโยงเพจ Facebook เปรม นมสด:**
-   - มีปุ่มลิงก์ตรงไปยังเพจ Facebook ของร้านทั้งบน Navbar, Hero Section, การ์ดติดต่อ, แบนเนอร์กิจกรรม, ปุ่มลอย (Floating Action Button) และ Footer
+### 1. การออกแบบที่เน้นความเรียบง่าย สบายตา (Minimalist UX/UI)
+- **Palette โทนสีเทคโนโลยี:** ใช้สีขาวและเทาอ่อนสว่าง (`Slate-50`) เพื่อความสบายตาเวลาอ่านชื่อหนังสือ ตัดด้วยสีน้ำเงินเทคโนโลยี (`Royal Blue #2563EB`)
+- **Typography:** ใช้ตัวอักษร **Prompt** และ **Inter** จาก Google Fonts ที่ทันสมัย ชัดเจน และอ่านง่ายทุกหน้าจอ
+- **Responsive 100%:** รองรับการแสดงผลทั้งบนสมาร์ตโฟน แท็บเล็ต และคอมพิวเตอร์เดสก์ท็อป
 
-4. **รองรับการแสดงผลบนอุปกรณ์ทุกขนาด (Mobile-Responsive 100%):**
-   - ออกแบบด้วยแนวคิด Mobile-First
-   - มีเมนู Hamburger Drawer สำหรับเปิดบนสมาร์ทโฟน
-   - ปุ่มโทรด่วนและปุ่ม Facebook แบบ Floating ชิดขวาล่าง
+### 2. ระบบค้นหาและตัวกรองที่ใช้งานง่าย (Search & Filtering)
+- 🔍 **Real-time Instant Search:** พิมพ์ค้นหาตามชื่อหนังสือ ผู้แต่ง หรือภาษาเขียนโค้ดได้ทันทีแบบไม่ต้องรีเฟรชหน้าเว็บ
+- 🏷️ **Category Filter Tabs:** กรองหนังสือตามหมวดหมู่ได้ในคลิกเดียว:
+  - 💻 **การเขียนโปรแกรม (Programming):** Python, React & Node.js, JavaScript
+  - 🤖 **AI & Data Science:** Machine Learning, SQL & Database Design
+  - 🔒 **ความมั่นคงปลอดภัยไซเบอร์ (Cybersecurity):** Cybersecurity 101
+  - ☁️ **Cloud & DevOps:** Docker & Kubernetes
+  - 🖥️ **พื้นฐานคอมพิวเตอร์ (Computer Basics & Network):** Computer Architecture, Network Fundamentals
+- 🔃 **Sort By:** จัดเรียงหนังสือตามยอดนิยม, มาใหม่ล่าสุด หรือเรียงตามราคา (ต่ำ-สูง / สูง-ต่ำ)
+
+### 3. ฟังก์ชันเสริมเพื่อประสบการณ์การซื้อที่ลื่นไหล
+- 📖 **Book Detail Modal:** คลิกดูรายละเอียดเนื้อหาโดยย่อ สารบัญเด่น จำนวนหน้า และระดับความเหมาะสมของผู้เรียน (Zero to Hero / Intermediate)
+- 🛒 **Slide-over Cart Drawer:** ตะกร้าสินค้าด้านข้างพร้อมระบบคำนวณยอดเงินรวมและค่าจัดส่งฟรี
+- ❤️ **Wishlist:** บันทึกหนังสือเล่มที่ถูกใจไว้ดูย้อนหลัง
+- 🧭 **Learning Guide for Beginners:** ส่วนแนะนำเส้นทางการเริ่มต้นศึกษาสำหรับมือใหม่ (สายโปรแกรมมิ่ง, สายข้อมูล & AI, สายระบบ & เน็ตเวิร์ก)
 
 ---
 
 ## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
 
-- **HTML5:** Semantic Elements สะอาดและเป็นระเบียบ
-- **CSS Framework:** [Tailwind CSS](https://tailwindcss.com/) (ผ่าน CDN)
-- **Typography:** Google Fonts ([Prompt](https://fonts.google.com/specimen/Prompt) & [Kanit](https://fonts.google.com/specimen/Kanit))
-- **Iconography:** [Font Awesome 6](https://fontawesome.com/)
-- **JavaScript (Vanilla JS):** จัดการระบบเมนูมือถือ, ระบบกรองหมวดหมู่เมนู (Filter Tabs) และ Canvas Snowfall Animation
+- **HTML5:** Semantic Web Elements โครงสร้างมาตรฐาน สะอาดและถูกต้อง
+- **CSS Framework:** [Tailwind CSS (v3 CDN)](https://tailwindcss.com/)
+- **Typography:** [Google Fonts](https://fonts.google.com/) (`Prompt` & `Inter`)
+- **Icons:** [Lucide Icons](https://lucide.dev/) (Minimalist SVG Icons)
+- **JavaScript (Vanilla JS):** จัดการ State ค้นหา, กรองหมวดหมู่, ป๊อปอัป Modal, ตะกร้าสินค้า และ Toast Notification
 
 ---
 
-## 📂 โครงสร้างไฟล์ในโปรเจกต์ (Project Structure)
+## 📂 โครงสร้างโฟลเดอร์ (Project Structure)
 
 ```text
-├── index.html            # ไฟล์หลักของ Landing Page
-├── README.md             # เอกสารอธิบายโปรเจกต์
-└── images/               # โฟลเดอร์รูปภาพจริงที่ใช้ในเว็บไซต์
-    ├── logo.png          # โลโก้ร้าน เปรม นมสด
-    ├── hero-bg.jpg       # ภาพบรรยากาศหลักใน Hero Section
-    ├── vibe-1.jpg..4.jpg # ภาพบรรยากาศภายในร้าน
-    ├── menu-1.jpg..7.jpg # ภาพเมนูแนะนำจริงทั้ง 7 เมนู
-    ├── บรรยากาศในร้าน/   # โฟลเดอร์รูปบรรยากาศต้นฉบับ
-    └── เมนูร้าน/         # โฟลเดอร์รูปเมนูต้นฉบับ
+├── index.html               # หน้าแรกของเว็บไซต์ ByteBooks (Main Landing Page)
+├── README.md                # เอกสารประกอบโปรเจกต์
+├── ร้านหนังสือ/              # โฟลเดอร์สำรองข้อมูลและไฟล์ต้นฉบับ
+│   └── index.html           # ไฟล์หน้าเว็บ ByteBooks
+├── ระบบของหาย/              # โปรเจกต์ระบบของหาย (Lost & Found Infographic)
+└── images/                  # ไฟล์รูปภาพและสื่อประกอบ
 ```
 
 ---
 
-## 🚀 วิธีการเปิดใช้งาน (Getting Started)
+## 🚀 วิธีการเปิดใช้งานบนเครื่องของคุณ (Getting Started)
 
-1. Clone หรือ Download Repository นี้ลงเครื่อง
+1. Clone หรือ Download Repository นี้:
    ```bash
-   git clone https://github.com/kannikacxkthxng-cpu/Lab2.git
+   git clone https://github.com/kannikacxkthxng-cpu/Lab1_1.git
    ```
-2. ดับเบิลคลิกเปิดไฟล์ `index.html` ผ่านเว็บเบราว์เซอร์ใดก็ได้ (Google Chrome, Microsoft Edge, Safari) ใช้งานได้ทันทีโดยไม่ต้องติดตั้งโปรแกรมเสริม
+2. ดับเบิลคลิกเปิดไฟล์ `index.html` ผ่านเว็บเบราว์เซอร์ใดก็ได้ (Chrome, Edge, Safari, Firefox) ใช้งานได้ทันทีโดยไม่ต้องติดตั้งหรือรันเซิร์ฟเวอร์
 
 ---
 
-© 2026 เปรม นมสด (Prem Nomsod). All rights reserved. 🎄
+© 2026 ByteBooks. Designed with Clean & Minimalist UX/UI for Tech Learners.
