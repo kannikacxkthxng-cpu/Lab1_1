@@ -60,7 +60,7 @@
 
 1. Clone หรือ Download Repository นี้ลงเครื่อง
    ```bash
-   git clone https://github.com/kannikacxkthxng-cpu/Lab1_1.git
+   git clone https://github.com/kannikacxkthxng-cpu/Lab2.git
    ```
 2. ดับเบิลคลิกเปิดไฟล์ `index.html` ผ่านเว็บเบราว์เซอร์ใดก็ได้ (Google Chrome, Microsoft Edge, Safari) ใช้งานได้ทันทีโดยไม่ต้องติดตั้งโปรแกรมเสริม
 
